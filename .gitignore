@@ -12,6 +12,7 @@
 
 # parcel-bundler cache (https://parceljs.org/)
 .cache
+.parcel-cache
 
 # dependencies
 /node_modules
@@ -20,6 +21,7 @@
 
 # production
 /build
+/dist
 
 # misc
 .DS_Store

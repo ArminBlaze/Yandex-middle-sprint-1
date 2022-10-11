@@ -5,8 +5,189 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
+
+  <style>
+
+    html, body {
+      width: 100vw;
+      height: 100vh;
+      margin: 0;
+      padding: 0;
+    }
+
+    .wrapper {
+      height: 100%;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      outline: 1px solid lime;
+    }
+
+    .Auth {
+      display: flex;
+      flex-direction: column;
+      padding: 30px;
+      min-width: 340px;
+      min-height: 450px;
+      margin: 0 auto;
+      box-sizing: border-box;
+
+      text-align: center;
+      font-family: sans-serif;
+      font-size: 16px;
+      font-weight: 500;
+      border-radius: 12px;
+      box-shadow: 0 0 6px rgba(0,0,0, 14%);
+    }
+
+    .Auth__Header {
+      font-weight: 500;
+      font-size: 20px;
+      line-height: 20px;
+      margin-bottom: 40px;
+    }
+
+    .Auth__Label {
+      display: block;
+      text-align: left;
+      color: #999999;
+      margin-bottom: 22px;
+      position: relative;
+    }
+
+    .Auth__Label:last-of-type {
+      margin-bottom: 47px;
+    }
+
+    .Auth__LabelFloat {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      z-index: 10;
+      padding: 5px 0;
+      box-sizing: border-box;
+    }
+
+    .Auth__input {
+      display: block;
+      width: 100%;
+      box-sizing: border-box;
+      border: none;
+      border-bottom: 2px solid #3369F3;
+      font-size: 16px;
+      font-weight: 500;
+      padding: 5px 0;
+      color: #1E1E1E;
+      position: relative;
+    }
+
+    .Auth__input::placeholder {
+      color: transparent;
+    }
+
+    .Auth__input::-moz-placeholder {
+      color: transparent;
+    }
+
+    .Auth__input::-ms-input-placeholder {
+      color: transparent;
+    }
+
+    .Auth__input::-webkit-input-placeholder {
+      color: transparent;
+    }
+
+    .Auth__input:-webkit-autofill{
+      box-shadow:inset 0 0 0 1000px #fff;
+    }
+
+    .Auth__input:focus {
+      border: none;
+      border-bottom: 2px solid #3369F3;
+      outline: none;
+    }
+
+    .Auth__input:not(:placeholder-shown) ~ .Auth__LabelFloat {
+      top: -21px;
+    }
+
+    .Auth__LoginButton {
+      display: block;
+      width: 100%;
+      margin-top: auto;
+      margin-bottom: 14px;
+      min-height: 37px;
+      background-color: #3369F3;
+      color: white;
+      border-radius: 8px;
+      border: none;
+      font-size: 16px;
+      font-weight: 500;
+
+    }
+
+    .Auth_RegisterLink {
+      display: block;
+      color: #3369F3;
+      text-decoration: none;
+    }
+
+    .Auth__Error {
+      color: #FF2F2F;
+      padding: 5px 0;
+      display: none;
+    }
+
+
+  </style>
 </head>
 <body>
-  Register
+  <div class="wrapper">
+    <form class="Auth" action="/echo">
+      <h1 class="Auth__Header">Регистрация</h1>
+
+      <label class="Auth__Label">
+        <input class="Auth__input" type="email" name="email" placeholder="Почта">
+        <div class="Auth__LabelFloat">Почта</div>
+        <div class="Auth__Error Auth__Error_login">Введите корректный адрес</div>
+      </label>
+      <label class="Auth__Label">
+        <input class="Auth__input" type="text" name="login" placeholder="Логин">
+        <div class="Auth__LabelFloat">Логин</div>
+        <div class="Auth__Error Auth__Error_login">Неверный логин</div>
+      </label>
+      <label class="Auth__Label">
+        <input class="Auth__input" type="text" name="name" placeholder="Имя">
+        <div class="Auth__LabelFloat">Имя</div>
+        <div class="Auth__Error Auth__Error_login">Введите имя</div>
+      </label>
+      <label class="Auth__Label">
+        <input class="Auth__input" type="text" name="surname" placeholder="Фамилия">
+        <div class="Auth__LabelFloat">Фамилия</div>
+        <div class="Auth__Error Auth__Error_login">Введите фамилию</div>
+      </label>
+      <label class="Auth__Label">
+        <input class="Auth__input" type="tel" name="tel" placeholder="Телефон">
+        <div class="Auth__LabelFloat">Телефон</div>
+        <div class="Auth__Error Auth__Error_login">Введите телефон</div>
+      </label>
+      <label class="Auth__Label">
+        <input type="password" class="Auth__input" name="password" placeholder="Пароль">
+        <div class="Auth__LabelFloat">Пароль</div>
+        <div class="Auth__Error Auth__Error_password">Неверный пароль</div>
+      </label>
+      <label class="Auth__Label">
+        <input type="password" class="Auth__input" name="repeat_password" placeholder="Пароль (ещё раз)">
+        <div class="Auth__LabelFloat">Пароль (ещё раз)</div>
+        <div class="Auth__Error Auth__Error_password">Пароли не совпадают</div>
+      </label>
+
+      <button class="Auth__LoginButton" type="submit">Зарегестрироваться</button>
+      <a class="Auth_RegisterLink" href="./Auth.hbs">Войти</a>
+
+    </form>
+  </div>
+
 </body>
 </html>

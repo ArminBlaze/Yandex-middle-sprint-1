@@ -12,7 +12,7 @@
 
 # parcel-bundler cache (https://parceljs.org/)
 .cache
-.parcel-cache
+/.parcel-cache
 
 # dependencies
 /node_modules

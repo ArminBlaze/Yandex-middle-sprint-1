@@ -12,7 +12,8 @@
 
 # parcel-bundler cache (https://parceljs.org/)
 .cache
-/.parcel-cache
+.parcel-cache
+.parcel-cache/data.mdb
 
 # dependencies
 /node_modules
@@ -33,5 +34,6 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
 .parcel-cache/data.mdb
-.parcel-cache/data.mdb
+.parcel-cache/lock.mdb

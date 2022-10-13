@@ -14,11 +14,15 @@
     }
 
     .Chats__Wrapper {
-      width: 310px;
+      width: 311px;
       background: #FBFBFB;
       border-right: 1px solid #EAEAEA;
-      padding: 10px;
+      {{!-- padding: 10px; --}}
       box-sizing: border-box;
+    }
+
+    .Chats__TopBlock {
+      padding: 10px;
     }
 
     .Chats__ProfileButton {
@@ -46,6 +50,10 @@
       transform: rotate(45deg);
     }
 
+    .Chats__SearchWrapper {
+      position: relative;
+    }
+
     .Chats__Search {
       width: 290px;
       height: 32px;
@@ -57,6 +65,20 @@
       border: none;
       margin-top: 23px;
       margin-bottom: 14px;
+      position: relative;
+      background-image: url('./search.svg');
+      background-repeat: no-repeat;
+      background-position: 37% 48%;
+    }
+
+
+    .Chats__SearchImage {
+      {{!-- position: absolute; --}}
+      top: 0;
+      left: 0;
+      width: 15px;
+      height: 15px;
+      z-index: 1;
     }
 
     .Chats__List {
@@ -67,25 +89,31 @@
 
     .Chats__ListItem {
       margin-top: 3px;
-      margin-bottom: 2px;
+      margin-bottom: 3px;
       position: relative;
-      {{!-- border-top: 1px solid #EAEAEA; --}}
-      
     }
 
     .Chats__ListItem:before {
       content: '';
       position: absolute;
-      left: 0;
-      right: 0;
-      top: 0;
+      left: 10px;
+      right: 10px;
+      top: -2px;
       height: 1px;
-      background-color: #EAEAEA;
-      border-top: 1px solid;
+      border-top: 1px solid #EAEAEA;
     }
 
     .Chats__ListItem:last-child {
       margin-bottom: 3px;
+    }
+
+    .Chats__ListItem:last-child:after {
+      content: '';
+      position: absolute;
+      left: 10px;
+      right: 10px;
+      bottom: 0;
+      height: 1px;
       border-bottom: 1px solid #EAEAEA;
     }
 
@@ -94,8 +122,10 @@
       display: flex;
       min-height: 71px;
       box-sizing: border-box;
-      margin-left: -10px;
-      margin-right: -10px;
+    }
+
+    .ListItem_selected {
+      background-color: #E4EDFD;
     }
 
     .ListItem__image {
@@ -105,7 +135,6 @@
       border-radius: 50%;
       margin-right: 10px;
       flex-shrink: 0;
-
     }
 
     .ListItem__Header {
@@ -158,10 +187,77 @@
   <div class="Chats__Wrapper">
     <div class="Chats__TopBlock">
       <a class="Chats__ProfileButton" href="">Профиль </a>
-      <input class="Chats__Search" type="search" placeholder="Поиск">
+      <div class="Chats__SearchWrapper">
+        <input class="Chats__Search" type="search" placeholder="Поиск">
+      </div>
     </div>
 
     <ul class="Chats__List">
+      <li class="Chats__ListItem ListItem">
+        <div class="ListItem__image"></div>
+        <div class="ListItem_RightBlock">
+          <div class="ListItem__Header">
+            <div class="ListItem__name">Андрей</div>
+            <div class="ListItem__time">10:49</div>
+          </div>
+          <div class="ListItem__Text">
+            И Human Interface Guidelines и Material Design рекомендуют Это не должно влезть
+            <div class="ListItem__MessageCounter">2</div>
+          </div>
+        </div>
+      </li>
+      <li class="Chats__ListItem ListItem">
+        <div class="ListItem__image"></div>
+        <div class="ListItem_RightBlock">
+          <div class="ListItem__Header">
+            <div class="ListItem__name">Андрей</div>
+            <div class="ListItem__time">10:49</div>
+          </div>
+          <div class="ListItem__Text">
+            И Human Interface Guidelines и Material Design рекомендуют Это не должно влезть
+            <div class="ListItem__MessageCounter">2</div>
+          </div>
+        </div>
+      </li>
+      <li class="Chats__ListItem ListItem">
+        <div class="ListItem__image"></div>
+        <div class="ListItem_RightBlock">
+          <div class="ListItem__Header">
+            <div class="ListItem__name">Андрей</div>
+            <div class="ListItem__time">10:49</div>
+          </div>
+          <div class="ListItem__Text">
+            И Human Interface Guidelines и Material Design рекомендуют Это не должно влезть
+            <div class="ListItem__MessageCounter">2</div>
+          </div>
+        </div>
+      </li>
+      <li class="Chats__ListItem ListItem ListItem_selected">
+        <div class="ListItem__image"></div>
+        <div class="ListItem_RightBlock">
+          <div class="ListItem__Header">
+            <div class="ListItem__name">Андрей</div>
+            <div class="ListItem__time">10:49</div>
+          </div>
+          <div class="ListItem__Text">
+            И Human Interface Guidelines и Material Design рекомендуют Это не должно влезть
+            <div class="ListItem__MessageCounter">2</div>
+          </div>
+        </div>
+      </li>
+      <li class="Chats__ListItem ListItem">
+        <div class="ListItem__image"></div>
+        <div class="ListItem_RightBlock">
+          <div class="ListItem__Header">
+            <div class="ListItem__name">Андрей</div>
+            <div class="ListItem__time">10:49</div>
+          </div>
+          <div class="ListItem__Text">
+            И Human Interface Guidelines и Material Design рекомендуют Это не должно влезть
+            <div class="ListItem__MessageCounter">2</div>
+          </div>
+        </div>
+      </li>
       <li class="Chats__ListItem ListItem">
         <div class="ListItem__image"></div>
         <div class="ListItem_RightBlock">

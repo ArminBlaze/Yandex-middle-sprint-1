@@ -5,8 +5,291 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
+
+  <style>
+    .Chat {
+      padding: 0 20px;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .Chat__Header {
+      min-height: 55px;
+      box-sizing: border-box;
+      border-bottom: 1px solid #EAEAEA;
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+    }
+
+    .Chat__Avatar {
+      width: 34px;
+      height: 34px;
+      background-color: #EFEFEF;
+      border-radius: 50%;
+      margin-right: 10px;
+
+    }
+
+    .Chat__Button {
+      margin-left: auto;
+      width: 30px;
+      height: 30px;
+      cursor: pointer;
+      background-color: transparent;
+      background-image: url('./Chat__Button.svg');
+      background-repeat: no-repeat;
+      background-position: 50% 50%;
+      background-size: auto 15px;
+      border: none;
+      outline: none;
+    }
+
+    .Chat__Content {
+      padding: 10px 0;
+    }
+
+    .Chat__Message {
+      max-width: 402px;
+      padding: 11px;
+      background-color: #F8F8F8;
+      border-radius: 12px;
+      border-top-left-radius: 0px;
+      font-family: sans-serif;
+      font-weight: 500;
+      color: #1E1E1E;
+      position: relative;
+      border: 1px solid transparent;
+      box-sizing: border-box;
+    }
+
+    .Chat__UserMessage {
+      background-color: #E4EDFD;
+      padding: 11px;
+      max-width: 402px;
+      width: max-content;
+      margin-left: auto;
+      border-radius: 12px;
+      border-bottom-left-radius: 0px;
+    }
+
+    .Chat__MessageTime:before,
+    .Chat__MessageTime:after
+    {
+      content: '';
+      clear: both;
+    }
+
+    .Chat__Timeline {
+      text-align: center;
+      color: #999999;
+      font-weight: 500;
+      font-size: 14px;
+      margin: 30px 0;
+    }
+
+    .Chat__Image,
+    .Chat__Message,
+    .Chat__UserMessage
+     {
+      margin-top: 10px;
+      margin-bottom: 10px;
+      font-weight: 500;
+      color: #1E1E1E;
+    }
+
+    .Chat__Image {
+      border: 1px solid #EAEAEA;
+      width: 316px;
+      border-radius: 12px;
+      position: relative;
+      box-sizing: border-box;
+    }
+
+    .Chat__Image > img {
+      vertical-align: top;
+      width: 100%;
+    }
+
+    
+    .Chat__MessageTime {
+      float: right;
+      color: #999999;
+      font-size: 10px;
+      margin-left: 10px;
+      box-sizing: border-box;
+
+      {{!-- margin-top: 10px; --}}
+      padding-top:6px;
+      padding-bottom: 6px;
+      
+      font-weight: 500;
+    }
+
+    .Chat__MessageTime_read {
+      color: #3369F3;
+      padding-left: 11px;
+      background-image: url('./Check.svg');
+      background-repeat: no-repeat;
+      background-position: 0 center;
+    }
+
+    .Chat__ImageTime {
+      position: absolute;
+      bottom: 10px;
+      right: 10px;
+      font-size: 10px;
+      background-color: rgba(82, 82, 82, 0.5);
+      color: white;
+      padding: 2px 7px;
+      border-radius: 30px;
+      
+
+      font-weight: 500;
+    }
+
+    .Footer {
+      border-top: 1px solid #EAEAEA;
+      padding: 11px 0;
+      display: flex;
+      align-items: center;
+    }
+
+    .Footer__FileLabel {
+      font-size: 0;
+      width: 32px;
+      height: 32px;
+      background-image: url('./Chat__File.svg');
+      cursor: pointer;
+      background-color: transparent;
+    }
+
+    .Footer__File {
+      display: none;
+    }
+
+    .Footer__MessageLabel {
+      position: relative;
+      flex-grow: 1;
+      margin: 0 10px;
+      font-size: 16px;
+    }
+
+    .Footer__MessagePlaceholder {
+      position: absolute;
+      top: 0;
+      left: 0;
+      padding: 10px 20px;
+      box-sizing: border-box;
+      font-size: 16px;
+      color: #999999;
+      font-weight: 500;
+    }
+
+    .Footer__MessageInput {
+      display: block;
+      width: 100%;
+      border-radius: 30px;
+      border: none;
+      background-color: #EFEFEF;
+      min-height: 32px;
+      box-sizing: border-box;
+      padding: 10px 20px;
+      font-size: 16px;
+      font-weight: 500;
+      color: #1E1E1E;
+    }
+
+    .Footer__MessageInput:focus {
+      border: none;
+      outline: none;
+    }
+
+    .Footer__MessageInput::placeholder {
+      color: transparent;
+    }
+
+    .Footer__MessageInput::-moz-placeholder {
+      color: transparent;
+    }
+
+    .Footer__MessageInput::-ms-input-placeholder {
+      color: transparent;
+    }
+
+    .Footer__MessageInput::-webkit-input-placeholder {
+      color: transparent;
+    }
+
+    .Footer__MessageInput:not(:placeholder-shown) ~ .Footer__MessagePlaceholder {
+      color: transparent;
+    }
+
+    .Footer__SendMessage {
+      width: 32px;
+      height: 32px;
+      background-color: #3369F3;
+      border: none;
+      border-radius: 50%;
+      background-image: url('./Arrow.svg');
+      background-repeat: no-repeat;
+      background-position: 55% 50%;
+      cursor: pointer;
+      font-size: 0;
+    }
+
+
+  </style>
 </head>
 <body>
-  Окно чата
+
+  
+  <div class="Chat">
+    <div class="Chat__Header">
+      <div class="Chat__Avatar"></div>
+      <div class="Chat__Name">Вадим</div>
+      <button class="Chat__Button" type="button"></button>
+    </div>
+
+
+    <div class="Chat__Content">
+      <div class="Chat__Timeline">19 июня</div>
+      <div class="Chat__Message">
+        Привет! Смотри, тут всплыл интересный кусок лунной космической истории — НАСА в какой-то момент попросила Хассельблад адаптировать модель SWC для полетов на Луну. Сейчас мы все знаем что астронавты летали с моделью 500 EL — и к слову говоря, все тушки этих камер все еще находятся на поверхности Луны, так как астронавты с собой забрали только кассеты с пленкой.
+
+        Хассельблад в итоге адаптировал SWC для космоса, но что-то пошло не так и на ракету они так никогда и не попали. Всего их было произведено 25 штук, одну из них недавно продали на аукционе за 45000 евро.
+        <div class="Chat__MessageTime">11:56</div>
+      </div>
+
+      <div class="Chat__Image">
+        <img src="./Camera.svg" alt="xz">
+
+        <div class="Chat__ImageTime">11:56</div>
+      </div>
+
+      <div class="Chat__UserMessage">
+        Круто!
+        <div class="Chat__MessageTime">12:00</div>
+      </div>
+
+      <div class="Chat__UserMessage">
+        Круто!
+        <div class="Chat__MessageTime Chat__MessageTime_read">12:00</div>
+      </div>
+    </div>
+
+
+    <form class="Chat__Footer Footer">
+      <label class="Footer__FileLabel">
+        <input class="Footer__File" type="file" placeholder="Add File">
+      </label>
+      <label class="Footer__MessageLabel">
+        <input class="Footer__MessageInput" type="text" placeholder="Сообщение">
+        <div class="Footer__MessagePlaceholder">Сообщение</div>
+      </label>
+      
+      <button type="submit" class="Footer__SendMessage">Send Message</button>
+    </form>
+  </div>
+  
 </body>
 </html>

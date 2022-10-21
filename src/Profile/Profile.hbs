@@ -274,7 +274,7 @@
 <body>
   <div class="Profile">
     <div class="Profile__SidePanel">
-      <div class="SidePanel__Button"></div>
+      <a class="SidePanel__Button" href="../Chats/Chats.hbs"></a>
     </div>
 
     <div class="Profile__Content">
@@ -286,32 +286,32 @@
       <form class="Profile__Form Profile__Form_userData">
         <label class="Profile__Label">
           <span class="Profile__LabelText">Почта</span>
-          <input class="Profile__Input" type="mail" value="pochta@yandex.ru" disabled>
+          <input class="Profile__Input" name="email" type="email" value="pochta@yandex.ru" disabled>
         </label>
 
         <label class="Profile__Label">
           <span class="Profile__LabelText">Логин</span>
-          <input class="Profile__Input" type="text" value="ivanivanov" disabled>
+          <input class="Profile__Input" name="login" type="text" value="ivanivanov" disabled>
         </label>
 
         <label class="Profile__Label">
           <span class="Profile__LabelText">Имя</span>
-          <input class="Profile__Input" type="text" value="Иван" disabled>
+          <input class="Profile__Input" name="first_name" type="text" value="Иван" disabled>
         </label>
 
         <label class="Profile__Label">
           <span class="Profile__LabelText">Фамилия</span>
-          <input class="Profile__Input" type="text" value="Иванов" disabled>
+          <input class="Profile__Input" name="second_name" type="text" value="Иванов" disabled>
         </label>
 
         <label class="Profile__Label">
           <span class="Profile__LabelText">Имя в чате</span> 
-          <input class="Profile__Input" type="text" value="Иван" disabled>
+          <input class="Profile__Input" name="display_name" type="text" value="Иван" disabled>
         </label>
 
         <label class="Profile__Label">
           <span class="Profile__LabelText">Телефон</span>
-          <input class="Profile__Input" type="tel" value="+7 (909) 967 30 30" disabled>
+          <input class="Profile__Input" name="phone" type="tel" value="+7 (909) 967 30 30" disabled>
         </label>
 
         <button class="Profile__SubmitButton" type="submit">Сохранить</button>
@@ -357,7 +357,7 @@
         <h4 class="Popup__Header">Загрузите файл</h4>
         <label class="Popup__Label">
           Выбрать файл на компьютере
-          <input class="Profile__AddAvatarInput" type="file" placeholder="Add File">
+          <input class="Profile__AddAvatarInput" name="avatar" type="file" placeholder="Add File">
         </label>
         <button class="Popup__Button" type="submit">Поменять</button>
         <div class="Popup__Error_noFile">

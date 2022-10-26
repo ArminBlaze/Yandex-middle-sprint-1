@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+
+  <style>
+    .Chat {
+      padding: 0 20px;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .Chat__Header {
+      position: relative;
+      min-height: 55px;
+      box-sizing: border-box;
+      border-bottom: 1px solid #EAEAEA;
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+    }
+
+    .Chat__Avatar {
+      width: 34px;
+      height: 34px;
+      background-color: #EFEFEF;
+      border-radius: 50%;
+      margin-right: 10px;
+    }
+
+    .Chat__Button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-left: auto;
+      width: 30px;
+      height: 30px;
+      cursor: pointer;
+      background-color: transparent;
+      {{!-- background-image: url('./img/Chat__Button.svg'); --}}
+      background-repeat: no-repeat;
+      background-position: 50% 50%;
+      background-size: auto 15px;
+      border: none;
+      border-radius: 50%;
+      outline: none;
+
+    }
+
+    .Chat__Button_active {
+      background-color: #F5F5F5;
+    }
+
+    .Chat__Button_active circle {
+      fill: #3369F3;
+    }
+
+    .Chat__Content {
+      padding: 10px 0;
+    }
+
+    .Chat__Message {
+      max-width: 402px;
+      padding: 11px;
+      background-color: #F8F8F8;
+      border-radius: 12px;
+      border-top-left-radius: 0px;
+      font-family: sans-serif;
+      font-weight: 500;
+      color: #1E1E1E;
+      position: relative;
+      border: 1px solid transparent;
+      box-sizing: border-box;
+    }
+
+    .Chat__UserMessage {
+      background-color: #E4EDFD;
+      padding: 11px;
+      max-width: 402px;
+      width: max-content;
+      margin-left: auto;
+      border-radius: 12px;
+      border-bottom-left-radius: 0px;
+    }
+
+    .Chat__MessageTime:before,
+    .Chat__MessageTime:after
+    {
+      content: '';
+      clear: both;
+    }
+
+    .Chat__Timeline {
+      text-align: center;
+      color: #999999;
+      font-weight: 500;
+      font-size: 14px;
+      margin: 30px 0;
+    }
+
+    .Chat__Image,
+    .Chat__Message,
+    .Chat__UserMessage
+     {
+      margin-top: 10px;
+      margin-bottom: 10px;
+      font-weight: 500;
+      color: #1E1E1E;
+    }
+
+    .Chat__Image {
+      border: 1px solid #EAEAEA;
+      width: 316px;
+      border-radius: 12px;
+      position: relative;
+      box-sizing: border-box;
+    }
+
+    .Chat__Image > img {
+      vertical-align: top;
+      width: 100%;
+    }
+    
+    .Chat__MessageTime {
+      float: right;
+      color: #999999;
+      font-size: 10px;
+      margin-left: 10px;
+      box-sizing: border-box;
+      padding-top:6px;
+      padding-bottom: 6px;
+      font-weight: 500;
+    }
+
+    .Chat__MessageTime_read {
+      color: #3369F3;
+      padding-left: 11px;
+      background-image: url('./img/Check.svg');
+      background-repeat: no-repeat;
+      background-position: 0 center;
+    }
+
+    .Chat__ImageTime {
+      position: absolute;
+      bottom: 10px;
+      right: 10px;
+      font-size: 10px;
+      line-height: 10px;
+      background-color: rgba(82, 82, 82, 0.5);
+      color: white;
+      padding: 2px 7px;
+      border-radius: 30px;
+      font-weight: 500;
+    }
+
+    .Footer {
+      position: relative;
+      border-top: 1px solid #EAEAEA;
+      padding: 11px 0;
+      display: flex;
+      align-items: center;
+    }
+
+    .Footer__FileLabel {
+      font-size: 0;
+      width: 32px;
+      height: 32px;
+      {{!-- background-image: url('./img/Chat__File.svg'); --}}
+      cursor: pointer;
+      background-color: transparent;
+    }
+
+    .Footer__FileLabel_active path {
+      fill: #3369F3;
+    }
+
+    .Footer__File {
+      display: none;
+    }
+
+    .Footer__MessageLabel {
+      position: relative;
+      flex-grow: 1;
+      margin: 0 10px;
+      font-size: 16px;
+    }
+
+    .Footer__MessagePlaceholder {
+      position: absolute;
+      top: 0;
+      left: 0;
+      padding: 10px 20px;
+      box-sizing: border-box;
+      font-size: 16px;
+      color: #999999;
+      font-weight: 500;
+    }
+
+    .Footer__MessageInput {
+      display: block;
+      width: 100%;
+      border-radius: 30px;
+      border: none;
+      background-color: #EFEFEF;
+      min-height: 32px;
+      box-sizing: border-box;
+      padding: 10px 20px;
+      font-size: 16px;
+      font-weight: 500;
+      color: #1E1E1E;
+    }
+
+    .Footer__MessageInput:focus {
+      border: none;
+      outline: none;
+    }
+
+    .Footer__MessageInput::placeholder {
+      color: transparent;
+    }
+
+    .Footer__MessageInput::-moz-placeholder {
+      color: transparent;
+    }
+
+    .Footer__MessageInput::-ms-input-placeholder {
+      color: transparent;
+    }
+
+    .Footer__MessageInput::-webkit-input-placeholder {
+      color: transparent;
+    }
+
+    .Footer__MessageInput:not(:placeholder-shown) ~ .Footer__MessagePlaceholder {
+      color: transparent;
+    }
+
+    .Footer__SendMessage {
+      width: 32px;
+      height: 32px;
+      background-color: #3369F3;
+      border: none;
+      border-radius: 50%;
+      background-image: url('./img/Arrow.svg');
+      background-repeat: no-repeat;
+      background-position: 55% 50%;
+      cursor: pointer;
+      font-size: 0;
+    }
+
+    .Menu__Button {
+      width: 22px;
+      height: 22px;
+      position: relative;
+      background-image: url('./img/AddUserButton.svg');
+      border: none;
+      background-color: transparent;
+      margin-right: 15px;
+    }
+
+    .Menu__Button_removeUser {
+      transform: rotate(45deg);
+    }
+
+    .Menu__item {
+      
+      padding: 8px 15px;
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      border-radius: 12px;
+      box-sizing: border-box;
+    }
+
+    .Menu__item:first-child {
+      padding-top: 15px;
+    }
+
+    .Menu__item:last-child {
+      padding-bottom: 15px;
+    }
+
+    .Menu__item:hover {
+      color: #3369f3;
+      text-decoration: underline;
+    }
+
+    .Chat__Menu {
+      position: absolute;
+      font-weight: 500;
+      color: #1E1E1E;
+      z-index: 100;
+      box-shadow: 0px 0px 6px rgba(0, 0, 0, 0.14);
+      border-radius: 12px;
+      background-color: #fff;
+    }
+
+    .Chat__Menu_user {
+      right: 0;
+      top: 120%;
+    }
+
+    .Chat__Menu_file {
+      left: 0;
+      bottom: 120%;
+    }
+
+    .Menu__Button_foto {
+      background-image: url('./img/FileMenu_Foto.svg');
+    }
+    .Menu__Button_file {
+      background-image: url('./img/FileMenu_File.svg');
+    }
+    .Menu__Button_location {
+      background-image: url('./img/FileMenu_Location.svg');
+    }
+
+    .Popup__Wrapper {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(0,0,0, 0.4);
+      z-index: 200;
+      align-items: center;
+      justify-content: center;
+      {{!-- display: flex; --}}
+      display: none;
+    }
+
+    .Popup {
+      {{!-- display: flex; --}}
+      display: none;
+      width: 340px;
+      height: 257px;
+      box-sizing: border-box;
+      background-color: #fff;
+      box-shadow: 0px 0px 6px rgba(0, 0, 0, 0.14);
+      border-radius: 12px;
+      padding: 40px;
+      flex-direction: column;
+    }
+
+    .Popup__Header {
+      margin: 0;
+      margin-bottom: 50px;
+      text-align: center;
+      font-family: 'Inter', sans-serif;
+      font-style: normal;
+      font-weight: 500;
+      line-height: 20px;
+      color: #1E1E1E;
+      font-size: 16px;
+    }
+
+    .Popup__Label {
+      text-align: left;
+      color: #999;
+      {{!-- margin-bottom: 22px; --}}
+      display: block;
+      position: relative;
+    }
+
+    .Popup__Input {
+      width: 100%;
+      box-sizing: border-box;
+      color: #1e1e1e;
+      border: none;
+      border-bottom: 2px solid #3369f3;
+      padding: 5px 0;
+      font-size: 16px;
+      font-weight: 500;
+      display: block;
+      position: relative;
+    }
+
+    .Popup__FloatLabel {
+      z-index: 10;
+      box-sizing: border-box;
+      padding: 5px 0;
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+    }
+
+    .Popup__Input::placeholder {
+      color: transparent;
+    }
+
+    .Popup__Input::-moz-placeholder {
+      color: transparent;
+    }
+
+    .Popup__Input::-ms-input-placeholder {
+      color: transparent;
+    }
+
+    .Popup__Input::-webkit-input-placeholder {
+      color: transparent;
+    }
+
+    .Popup__Input:-webkit-autofill{
+      box-shadow:inset 0 0 0 1000px #fff;
+    }
+
+    .Popup__Input:focus {
+      border: none;
+      border-bottom: 2px solid #3369F3;
+      outline: none;
+    }
+
+    .Popup__Input:not(:placeholder-shown) ~ .Popup__FloatLabel {
+      top: -21px;
+    }
+
+    .Popup__Button {
+      color: white;
+      background-color: #fff;
+      background: #3369F3;
+      border-radius: 8px;
+      display: block;
+      border: none;
+      width: 100%;
+      box-sizing: border-box;
+      padding: 12px;
+      line-height: 13px;
+      margin-top: auto;
+    }
+  </style>
+</head>
+<body>
+
+  
+  <div class="Chat">
+    <div class="Chat__Header">
+      <div class="Chat__Avatar"></div>
+      <div class="Chat__Name">Вадим</div>
+      <button class="Chat__Button Chat__Button_active" type="button">
+          <svg width="3" height="16" viewBox="0 0 3 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="1.5" cy="2" r="1.5" fill="#1E1E1E"/>
+            <circle cx="1.5" cy="8" r="1.5" fill="#1E1E1E"/>
+            <circle cx="1.5" cy="14" r="1.5" fill="#1E1E1E"/>
+          </svg>
+      </button>
+
+      <div class="Chat__Menu Chat__Menu_user">
+        <div class="Menu__item">
+          <button class="Menu__Button Menu__Button_addUser" type="button">
+          </button>
+          Добавить пользователя
+        </div>
+        <div class="Menu__item">
+          <button class="Menu__Button Menu__Button_removeUser" type="button"></button>
+          Удалить пользователя
+        </div>
+      </div>
+
+    </div>
+
+
+    <div class="Chat__Content">
+      <div class="Chat__Timeline">19 июня</div>
+      <div class="Chat__Message">
+        Привет! Смотри, тут всплыл интересный кусок лунной космической истории — НАСА в какой-то момент попросила Хассельблад адаптировать модель SWC для полетов на Луну. Сейчас мы все знаем что астронавты летали с моделью 500 EL — и к слову говоря, все тушки этих камер все еще находятся на поверхности Луны, так как астронавты с собой забрали только кассеты с пленкой.
+
+        Хассельблад в итоге адаптировал SWC для космоса, но что-то пошло не так и на ракету они так никогда и не попали. Всего их было произведено 25 штук, одну из них недавно продали на аукционе за 45000 евро.
+        <div class="Chat__MessageTime">11:56</div>
+      </div>
+
+      <div class="Chat__Image">
+        <img src="./img/Camera.svg" alt="xz">
+
+        <div class="Chat__ImageTime">11:56</div>
+      </div>
+
+      <div class="Chat__UserMessage">
+        Круто!
+        <div class="Chat__MessageTime">12:00</div>
+      </div>
+
+      <div class="Chat__UserMessage">
+        Круто!
+        <div class="Chat__MessageTime Chat__MessageTime_read">12:00</div>
+      </div>
+    </div>
+
+
+    <form class="Chat__Footer Footer">
+
+      <div class="Chat__Menu Chat__Menu_file">
+        <div class="Menu__item ">
+          <button class="Menu__Button Menu__Button_foto" type="button"></button>
+          Фото и видео
+        </div>
+        <div class="Menu__item ">
+          <button class="Menu__Button Menu__Button_file" type="button"></button>
+          Файл
+        </div>
+        <div class="Menu__item ">
+          <button class="Menu__Button Menu__Button_location" type="button"></button>
+          Локация
+        </div>
+      </div>
+
+      <label class="Footer__FileLabel Footer__FileLabel_active">
+        <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path fill-rule="evenodd" clip-rule="evenodd" d="M7.18662 13.5L14.7628 5.92389L15.7056 6.8667L8.12943 14.4428L7.18662 13.5Z" fill="#999999"/>
+          <path fill-rule="evenodd" clip-rule="evenodd" d="M9.70067 16.0141L17.2768 8.43793L18.2196 9.38074L10.6435 16.9569L9.70067 16.0141Z" fill="#999999"/>
+          <path fill-rule="evenodd" clip-rule="evenodd" d="M15.0433 21.3567L22.6195 13.7806L23.5623 14.7234L15.9861 22.2995L15.0433 21.3567Z" fill="#999999"/>
+          <path fill-rule="evenodd" clip-rule="evenodd" d="M17.5574 23.8708L25.1335 16.2946L26.0763 17.2374L18.5002 24.8136L17.5574 23.8708Z" fill="#999999"/>
+          <path fill-rule="evenodd" clip-rule="evenodd" d="M17.5574 23.8709C14.9423 26.486 10.7118 26.4954 8.10831 23.8919C5.50482 21.2884 5.51424 17.0579 8.12936 14.4428L7.18655 13.5C4.0484 16.6381 4.0371 21.7148 7.16129 24.839C10.2855 27.9632 15.3621 27.9518 18.5003 24.8137L17.5574 23.8709Z" fill="#999999"/>
+          <path fill-rule="evenodd" clip-rule="evenodd" d="M22.6195 13.7806L23.5623 14.7234C26.003 12.2826 26.0118 8.3341 23.5819 5.90417C21.152 3.47424 17.2035 3.48303 14.7627 5.92381L15.7055 6.86662C17.6233 4.94887 20.7257 4.94196 22.6349 6.85119C24.5441 8.76042 24.5372 11.8628 22.6195 13.7806Z" fill="#999999"/>
+          <path fill-rule="evenodd" clip-rule="evenodd" d="M9.70092 16.0144C7.95751 17.7578 7.95123 20.5782 9.68689 22.3138C11.4226 24.0495 14.2429 24.0432 15.9863 22.2998L15.0435 21.357C13.8231 22.5774 11.8489 22.5818 10.6339 21.3668C9.41894 20.1518 9.42334 18.1776 10.6437 16.9572L9.70092 16.0144Z" fill="#999999"/>
+        </svg>
+        <input class="Footer__File" type="file" placeholder="Add File">
+      </label>
+      <label class="Footer__MessageLabel">
+        <input class="Footer__MessageInput" type="text" placeholder="Сообщение">
+        <div class="Footer__MessagePlaceholder">Сообщение</div>
+      </label>
+      
+      <button type="submit" class="Footer__SendMessage">Send Message</button>
+    </form>
+
+
+    <div class="Popup__Wrapper">
+
+      <form class="Popup Popup_AddUser" action="">
+        <h4 class="Popup__Header">Добавить пользователя</h4>
+        <label class="Popup__Label" for="">
+          <input class="Popup__Input" type="text" name="login" placeholder="Логин">
+          <div class="Popup__FloatLabel">Логин</div>
+        </label>
+        <button class="Popup__Button" type="submit">Добавить</button>
+      </form>
+
+
+      <form class="Popup Popup_RemoveUser" action="">
+        <h4 class="Popup__Header">Удалить пользователя</h4>
+        <label class="Popup__Label" for="">
+          <input class="Popup__Input" type="text" name="login" placeholder="Логин">
+          <div class="Popup__FloatLabel">Логин</div>
+        </label>
+        <button class="Popup__Button" type="submit">Удалить</button>
+      </form>
+
+    </div>
+
+  
+
+
+  </div>
+  
+</body>
+</html>

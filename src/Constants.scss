@@ -1,0 +1,14 @@
+$blueColor: #3369F3 !global;
+$redColor: #FF2F2F !global;
+$gray1: #FBFBFB !global;
+$gray2: #EAEAEA !global;
+$fontColor: #1E1E1E !global;
+
+@mixin fontProps{
+  color: $fontColor;
+  font-family: 'Inter', sans-serif;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 16px;
+}
+

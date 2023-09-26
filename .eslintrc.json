@@ -1,0 +1,25 @@
+{
+	"extends": [
+		"airbnb",  //наследуем от этих конфигов
+		"airbnb-typescript"
+	],
+	"parser": "@typescript-eslint/parser",
+	"parserOptions": {
+		"project": "./tsconfig.json"
+	},
+	"plugins": ["@typescript-eslint"],
+	"settings": {
+    "import/resolver": {
+      "node": {
+        "extensions": [".js", ".jsx", ".ts", ".tsx"]
+      }
+    }
+  },
+	"rules": {
+		"max-len": [2, 100],
+		"max-params": [2, 3],
+		"@typescript-eslint/no-unused-vars": 2,
+		"brace-style": ["error", "stroustrup"]
+		// "import/extensions": ["never"]
+	}
+}

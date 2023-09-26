@@ -1,5 +1,5 @@
 
-export function sum(...args: number[]) {
+export default function sum(...args: number[]) {
   if (args.length === 0) {
     throw Error('sum required at least 1 argument')
   }

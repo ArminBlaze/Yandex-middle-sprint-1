@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Document</title>
+</head>
+<body>
+	
+</body>
+
+<script>
+	function zip(...objects) {
+		// Ваш код
+		console.log(objects);
+		console.log(typeof objects);
+		let result = {}
+
+		objects.forEach(obj => {
+			Object.entries(obj).forEach(([key, value]) => {
+				if(!result[key]) {
+					result[key] = value;
+				}
+			})
+		});
+
+		console.log(result);
+	}
+
+	// Пример работы
+	const objects = [
+		{ foo: 5, bar: 6 },
+		{ foo: 13, baz: -1 } // foo - повторяющийся ключ
+	];
+
+	zip(...objects); // { foo: 5, bar: 6, baz: -1 }
+</script>
+</html>

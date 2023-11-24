@@ -19,7 +19,18 @@
 		"max-len": [2, 100],
 		"max-params": [2, 3],
 		"@typescript-eslint/no-unused-vars": 2,
-		"brace-style": ["error", "stroustrup"]
-		// "import/extensions": ["never"]
+		"brace-style": ["error", "stroustrup"],
+		"linebreak-style": ["error", "windows"],
+		"indent": "off",
+		"@typescript-eslint/indent": ["error", "tab"],
+		"no-tabs": 0,
+		"keyword-spacing": "off",
+    "@typescript-eslint/keyword-spacing": ["error", { 
+			"after": false,
+			"overrides": {
+				"from": { "after": true }
+			 }
+		}],
+		"arrow-parens": ["error", "as-needed"]
 	}
 }

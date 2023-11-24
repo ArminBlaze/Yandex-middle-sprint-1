@@ -2,3 +2,5 @@
 /build
 /dist
 **/*.min.js
+/.git
+.parcel-cache

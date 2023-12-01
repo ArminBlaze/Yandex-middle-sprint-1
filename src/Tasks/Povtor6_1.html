@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Document</title>
+</head>
+<body>
+	
+</body>
+
+<script>
+	function foo(callback) {
+		setTimeout(function() {
+			callback('A');
+		}, Math.random()*100);
+	}
+
+	function bar(callback) {
+		setTimeout(function() {
+			callback('B');
+		}, Math.random()*100);
+	}
+
+	function baz(callback) {
+		setTimeout(function() {
+			callback('C');
+		}, Math.random()*100);
+	}
+
+	Promise.all([
+		new Promise(resolve => foo(resolve)),
+		new Promise(resolve => bar(resolve)),
+		new Promise(resolve => baz(resolve)),
+	])
+	.then((arr) => {
+		arr.forEach(item => console.log(item))
+	})
+
+	
+	
+</script>
+</html>

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Document</title>
+</head>
+<body>
+	
+</body>
+
+<script>
+
+	function getData() {
+		return new Promise(resolve => {
+			setTimeout(() => resolve(42), 1000)
+		})
+	}
+
+	const memoized = memoize(getData, 1000);
+
+	memoized()
+		.then(data1 => console.log(data1)) // получаем долго
+		.then(memoized)
+		.then(data2 => console.log(data2)) // получаем быстро, из кеша
+		.then(memoized)
+		.then(data3 => console.log(data3)) // получаем быстро, из кеша
+		.then(() => {
+			setTimeout(() => {
+				return memoized().then(data4 => console.log(data4)); // получаем долго, считается заново
+			}, 5000);
+		});
+
+	function memoize(callback, timeout) {
+		console.log('Запускаю memoize');
+		const cache = {}
+
+		async function makeNewRequest() {
+			return await getData().then(result => {
+				console.log('result внутри makeNewRequest', result);
+				cache.lastTime = Date.now();
+				cache.result = result;
+			})
+		}
+
+
+		async function test(params) {
+			// последнее время получения getData + время timeout 
+			// сравнить с текущим
+
+			const maxTime = cache.lastTime + timeout;
+			const currentTime = Date.now();
+
+			console.log(maxTime);
+
+			if(currentTime > maxTime || !maxTime) {
+				// сделать новый запрос getData
+				console.log('Делаем новый запрос');
+				await makeNewRequest();
+			}
+			else {
+				console.log('Берём из кеша');
+			}
+
+			console.log('Возвращаю: ', cache.result);
+			return Promise.resolve(cache.result)
+		}
+
+		console.log(timeout);
+		return test
+	}
+
+</script>
+</html>

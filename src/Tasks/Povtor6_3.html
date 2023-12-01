@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Document</title>
+</head>
+<body>
+	
+</body>
+
+<script>
+
+	Promise.prototype.finally = async function (fn) {
+		// Код здесь
+
+		try {
+			await fn()
+			return this
+		} catch (error) {
+			return Promise.reject(error)
+		}
+		
+	}
+
+	// const resolvedPromise = Promise.resolve(1)
+	// 	.finally(() => console.log('Очистка')) //сработает
+
+	// //reject
+	// const rejectedPromise = Promise.reject('Error')
+	// 	.finally(() => console.log('Очистка 2')) //сработает
+
+	
+	// const promise = Promise.reject('Error')
+	// 	.finally(() => {throw 'finally foo' ;})
+	// 	.catch(err => console.log(err))
+
+	//resolve
+	// const resolvedPromise = Promise.resolve(50)
+	// .finally(() => Promise.resolve(42))
+	// .then(result => console.log(result)) //Response 50
+	
+	// //reject
+	const rejectedPromise = Promise.reject('Error')
+		.finally(() => Promise.reject('foo'))
+		.catch(e => console.log(e)); //foo
+</script>
+</html>

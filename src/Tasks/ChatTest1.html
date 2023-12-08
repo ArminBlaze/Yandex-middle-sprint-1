@@ -30,29 +30,80 @@
 			display: block;
 			margin-bottom: 10px;
 		}
+
+		.id {
+			display: none;
+			text-align: center;
+		}
 	</style>
 </head>
 <body>
-	<div class="login">
-		<h2 class="login__header">Вход</h2>
-		<form class="loginForm" action="">
-			<label>
-				Логин
-				<input type="text" name="login">
-			</label>
-			<label>
-				Пароль
-				<input type="password" name="password">
-			</label>
-			<button type="submit">Зайти</button>
-		</form>
-	</div>
+	<div class="wrapper">
+		<div class="login">
+			<h2 class="login__header">Вход</h2>
+			<form class="loginForm" action="">
+				<label>
+					Логин
+					<input type="text" name="login">
+				</label>
+				<label>
+					Пароль
+					<input type="password" name="password">
+				</label>
+				<button type="submit">Зайти</button>
+			</form>
+		</div>
+
+		<div class="id"></div>
+</div>
 </body>
 
 <script>
+	window.onload = function() {
+		autoLogin();
+	};
+
 	const host = 'https://ya-praktikum.tech';
 
 	const form = document.querySelector('.loginForm')
+
+	// при загрузке страницы нужно пытаться получить id пользователя.
+	// если успешно, то форму логина нужно скрыть
+
+	let loggedIn = false;
+	let userId = null;
+
+	const state = {
+		userId: null,
+		isLoggedIn: false,
+	}
+
+	function afterLogin(id) {
+		state.loggedIn = true;
+		state.userId = id;
+		hideLoginForm();
+		showUserId(id);
+	}
+
+	function hideLoginForm() {
+		form.style.display = "none";
+	}
+
+	function showUserId(id) {
+		const idBlock = document.querySelector('.id')
+		idBlock.style.display = "block"
+		idBlock.textContent = "UserID: " + id;
+	}
+
+	async function autoLogin() {
+		console.log('запускаю автологин');
+		const id = await getUserData();
+		console.log("ID в AUTOLOGIN", id);
+
+		if(id) {
+			afterLogin(id);
+		}
+	}
 
 
 	form.addEventListener('submit', (event) => {
@@ -66,14 +117,17 @@
 			password: form.password.value
 		}
 
-		makeLogin(data);
+			makeLogin(data)
+			.then(data => {
+				getUserData();
+			});
+
 	})
 
 	function makeLogin(data) {
-
 		const json = JSON.stringify(data) 
 
-		fetch(`${host}/api/v2/auth/signin`, {
+		return fetch(`${host}/api/v2/auth/signin`, {
 			method: 'POST',
 			credentials: 'include', // Нужно подставлять куки
 			mode: 'cors', // Работаем с CORS
@@ -87,17 +141,22 @@
 				console.log(data);
 				return data;
 			})
-			.then(data => {
-				fetch(`${host}/api/v2/auth/user`, { // Получаем подробную информацию о пользователе и проверяем, что куки проставились
-					method: 'GET',
-					mode: 'cors',
-					credentials: 'include',
-				})
-				.then(r => r.json())
-				.then(data => {
-					console.log('user', data);
-				});
-			});
+		
+	}
+
+	async function getUserData() {
+		return fetch(`${host}/api/v2/auth/user`, { // Получаем подробную информацию о пользователе и проверяем, что куки проставились
+			method: 'GET',
+			mode: 'cors',
+			credentials: 'include',
+		})
+		.then(r => r.json())
+		.then(data => {
+			console.log('user', data);
+			const id = data.id;
+			console.log('ID', id);
+			return id;
+		});
 	}
 </script>
 </html>

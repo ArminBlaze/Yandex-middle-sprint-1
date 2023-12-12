@@ -11,22 +11,21 @@
 			width: 100%;
 		}
 
-		.login {
+		.auth__elem {
 			display: flex;
 			flex-direction: column;
 			padding-top: 20px;
 		}
 
-		.login__header {
+		.auth__header {
 			text-align: center;
 		}
 
-		.loginForm {
+		.auth__Form {
 			margin: 0 auto;
-
 		}
 
-		.loginForm label {
+		.auth__Form label {
 			display: block;
 			margin-bottom: 10px;
 		}
@@ -39,19 +38,57 @@
 </head>
 <body>
 	<div class="wrapper">
-		<div class="login">
-			<h2 class="login__header">Вход</h2>
-			<form class="loginForm" action="">
-				<label>
-					Логин
-					<input type="text" name="login">
-				</label>
-				<label>
-					Пароль
-					<input type="password" name="password">
-				</label>
-				<button type="submit">Зайти</button>
-			</form>
+
+		<div class="auth">
+			<div class="login auth__elem">
+				<h2 class="login__header auth__header">Вход</h2>
+				<form class="loginForm auth__Form" action="">
+					<label>
+						Логин
+						<input type="text" name="login">
+					</label>
+					<label>
+						Пароль
+						<input type="password" name="password">
+					</label>
+					<button type="submit">Зайти</button>
+				</form>
+			</div>
+	
+			<div class="register auth__elem">
+				<h2 class="register__header auth__header">Регистрация</h2>
+				<form class="registerForm auth__Form" action="">
+					<label>
+						Имя
+						<input type="text" name="first_name">
+					</label>
+					<label>
+						Фамилия
+						<input type="text" name="second_name">
+					</label>
+					<label>
+						Логин
+						<input type="text" name="login">
+					</label>
+					<label>
+						Электронная почта
+						<input type="email" name="email">
+					</label>
+					<label>
+						Телефон
+						<input type="tel" name="phone">
+					</label>
+					<label>
+						Пароль
+						<input type="password" name="password">
+					</label>
+					<label>
+						Повторите пароль
+						<input type="password" name="password2">
+					</label>
+					<button type="submit">Зайти</button>
+				</form>
+			</div>
 		</div>
 
 		<div class="id"></div>
@@ -65,7 +102,9 @@
 
 	const host = 'https://ya-praktikum.tech';
 
-	const form = document.querySelector('.loginForm')
+	const loginForm = document.querySelector('.loginForm');
+	const registerForm = document.querySelector('.registerForm');
+	const authBlock = document.querySelector('.auth');
 
 	// при загрузке страницы нужно пытаться получить id пользователя.
 	// если успешно, то форму логина нужно скрыть
@@ -81,12 +120,12 @@
 	function afterLogin(id) {
 		state.loggedIn = true;
 		state.userId = id;
-		hideLoginForm();
+		hideAuthBlock();
 		showUserId(id);
 	}
 
-	function hideLoginForm() {
-		form.style.display = "none";
+	function hideAuthBlock() {
+		authBlock.style.display = "none";
 	}
 
 	function showUserId(id) {
@@ -106,20 +145,54 @@
 	}
 
 
-	form.addEventListener('submit', (event) => {
+	loginForm.addEventListener('submit', (event) => {
 		event.preventDefault();
 		
-		console.log(form.login.value);
-		console.log(form.password.value);
+		console.log(loginForm.login.value);
+		console.log(loginForm.password.value);
 
 		const data = {
-			login: form.login.value,
-			password: form.password.value
+			login: loginForm.login.value,
+			password: loginForm.password.value
 		}
 
 			makeLogin(data)
 			.then(data => {
 				getUserData();
+			});
+
+	})
+
+	registerForm.addEventListener('submit', (event) => {
+		event.preventDefault();
+		
+		console.log();
+
+		const password = registerForm.password.value;
+		const password2 = registerForm.password2.value;
+
+		if(password !== password2) {
+			alert("Пароли должны совпадать!")
+			return;
+		}
+
+		const data = {
+			first_name: registerForm.first_name.value,
+			second_name: registerForm.second_name.value,
+			login: registerForm.login.value,
+			email: registerForm.email.value,
+			password: password,
+			phone: registerForm.phone.value
+		}
+
+
+		console.log(data);
+		makeRegister(data)
+			.then(async data =>  {
+				const id = await getUserData();
+				if(id) {
+					afterLogin(id);
+				}
 			});
 
 	})
@@ -131,7 +204,27 @@
 			method: 'POST',
 			credentials: 'include', // Нужно подставлять куки
 			mode: 'cors', // Работаем с CORS
-			headers: { //данные у нас в FormData, поэтому это не нужно
+			headers: {
+				'content-type': 'application/json', // Данные отправляем в формате JSON
+			},
+			body: json
+		})
+			.then(response => response.text()) // Можно вытащить через .json()
+			.then(data => {
+				console.log(data);
+				return data;
+			})
+		
+	}
+
+	function makeRegister(data) {
+		const json = JSON.stringify(data) 
+
+		return fetch(`${host}/api/v2/auth/signup`, {
+			method: 'POST',
+			credentials: 'include', // Нужно подставлять куки
+			mode: 'cors', // Работаем с CORS
+			headers: {
 				'content-type': 'application/json', // Данные отправляем в формате JSON
 			},
 			body: json

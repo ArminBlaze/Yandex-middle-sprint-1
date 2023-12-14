@@ -30,9 +30,25 @@
 			margin-bottom: 10px;
 		}
 
+		.Form input {
+			padding: 5px 10px;
+		}
+
 		.chat {
 			display: none;
 			text-align: center;
+		}
+
+		button {
+			margin-bottom: 15px;
+			padding: 5px 10px;
+		}
+
+		.chat__messages {
+			width: 500px;
+			height: 300px;
+			box-shadow: 1px 1px 3px rgba(0,0,0, 0.3);
+			margin: auto;
 		}
 	</style>
 </head>
@@ -110,6 +126,19 @@
 			</div>
 
 			<button class="addUser" type="button">Добавить пользователя 2 Id: 1349562</button>
+			<br>
+			<button class="joinChat" type="button">Зайти в чат</button>
+
+			<div class="chat__messages"></div>
+
+			<div class="Form__wrapper">
+				<form class="sendMessage Form">
+					<label>Ваше сообщение
+						<input type="text" name="message">
+					</label>
+					<button class="sendMessage__Button" type="submit">Отправить</button>
+				</form>
+			</div>
 
 		</div>
 </div>
@@ -121,22 +150,28 @@
 	};
 
 	const host = 'https://ya-praktikum.tech';
+	const chatId = 39686;
 
 	const loginForm = document.querySelector('.loginForm');
 	const registerForm = document.querySelector('.registerForm');
 	const authBlock = document.querySelector('.auth');
 	const createChatForm = document.querySelector('.createChat');
 	const addUserButton = document.querySelector('.addUser');
+	const joinChatButton = document.querySelector('.joinChat');
+	const sendMessageForm = document.querySelector('.sendMessage');
+	const messagesWindow = document.querySelector('.chat__messages')
 
 	// при загрузке страницы нужно пытаться получить id пользователя.
 	// если успешно, то форму логина нужно скрыть
 
-	let loggedIn = false;
-	let userId = null;
+	// let loggedIn = false;
+	// let userId = null;
 
 	const state = {
 		userId: null,
 		isLoggedIn: false,
+		token: null,
+		socket: null
 	}
 
 	function afterLogin(id) {
@@ -145,7 +180,7 @@
 		hideAuthBlock();
 		showUserId(id);
 
-		showChatUsers(39686);
+		showChatUsers(chatId);
 	}
 
 	function hideAuthBlock() {
@@ -182,10 +217,29 @@
 			password: loginForm.password.value
 		}
 
-			makeLogin(data)
+		makeLogin(data)
 			.then(data => {
 				getUserData();
 			});
+
+		function makeLogin(data) {
+			const json = JSON.stringify(data) 
+
+			return fetch(`${host}/api/v2/auth/signin`, {
+				method: 'POST',
+				credentials: 'include', // Нужно подставлять куки
+				mode: 'cors', // Работаем с CORS
+				headers: {
+					'content-type': 'application/json', // Данные отправляем в формате JSON
+				},
+				body: json
+			})
+				.then(response => response.text()) // Можно вытащить через .json()
+				.then(data => {
+					console.log(data);
+					return data;
+				})
+		}
 	})
 
 	createChatForm.addEventListener('submit', (event) => {
@@ -201,6 +255,24 @@
 				console.log('createChat returnValue: ', data);
 			});
 
+		function createChat(data) {
+			const json = JSON.stringify(data) 
+
+			return fetch(`${host}/api/v2/chats`, {
+				method: 'POST',
+				credentials: 'include', // Нужно подставлять куки
+				mode: 'cors', // Работаем с CORS
+				headers: {
+					'content-type': 'application/json', // Данные отправляем в формате JSON
+				},
+				body: json
+			})
+				.then(response => response.text()) // Можно вытащить через .json()
+				.then(data => {
+					console.log(data);
+					return data;
+				})
+		}
 	})
 
 	registerForm.addEventListener('submit', (event) => {
@@ -233,65 +305,27 @@
 					afterLogin(id);
 				}
 			});
+
+
+		function makeRegister(data) {
+			const json = JSON.stringify(data) 
+
+			return fetch(`${host}/api/v2/auth/signup`, {
+				method: 'POST',
+				credentials: 'include', // Нужно подставлять куки
+				mode: 'cors', // Работаем с CORS
+				headers: {
+					'content-type': 'application/json', // Данные отправляем в формате JSON
+				},
+				body: json
+			})
+				.then(response => response.text()) // Можно вытащить через .json()
+				.then(data => {
+					console.log(data);
+					return data;
+				})
+		}
 	})
-
-
-	function createChat(data) {
-		const json = JSON.stringify(data) 
-
-		return fetch(`${host}/api/v2/chats`, {
-			method: 'POST',
-			credentials: 'include', // Нужно подставлять куки
-			mode: 'cors', // Работаем с CORS
-			headers: {
-				'content-type': 'application/json', // Данные отправляем в формате JSON
-			},
-			body: json
-		})
-			.then(response => response.text()) // Можно вытащить через .json()
-			.then(data => {
-				console.log(data);
-				return data;
-			})
-	}
-
-	function makeLogin(data) {
-		const json = JSON.stringify(data) 
-
-		return fetch(`${host}/api/v2/auth/signin`, {
-			method: 'POST',
-			credentials: 'include', // Нужно подставлять куки
-			mode: 'cors', // Работаем с CORS
-			headers: {
-				'content-type': 'application/json', // Данные отправляем в формате JSON
-			},
-			body: json
-		})
-			.then(response => response.text()) // Можно вытащить через .json()
-			.then(data => {
-				console.log(data);
-				return data;
-			})
-	}
-
-	function makeRegister(data) {
-		const json = JSON.stringify(data) 
-
-		return fetch(`${host}/api/v2/auth/signup`, {
-			method: 'POST',
-			credentials: 'include', // Нужно подставлять куки
-			mode: 'cors', // Работаем с CORS
-			headers: {
-				'content-type': 'application/json', // Данные отправляем в формате JSON
-			},
-			body: json
-		})
-			.then(response => response.text()) // Можно вытащить через .json()
-			.then(data => {
-				console.log(data);
-				return data;
-			})
-	}
 
 	async function getUserData() {
 		return fetch(`${host}/api/v2/auth/user`, { // Получаем подробную информацию о пользователе и проверяем, что куки проставились
@@ -317,22 +351,22 @@
 				const str = data.map(item => `${item.first_name} (${item.id})`).join(', ')
 				usersBlock.textContent = str;
 			});
-	}
 
-	function loadChatUsers(chatId) {
-		return fetch(`${host}/api/v2/chats/${chatId}/users`, {
-			method: 'GET',
-			credentials: 'include', // Нужно подставлять куки
-			mode: 'cors', // Работаем с CORS
-			headers: {
-				'content-type': 'application/json', // Данные отправляем в формате JSON
-			},
-			// body: json
-		})
-			.then(response => response.json()) // Можно вытащить через .json()
-			.then(data => {
-				return data;
+		function loadChatUsers(chatId) {
+			return fetch(`${host}/api/v2/chats/${chatId}/users`, {
+				method: 'GET',
+				credentials: 'include', // Нужно подставлять куки
+				mode: 'cors', // Работаем с CORS
+				headers: {
+					'content-type': 'application/json', // Данные отправляем в формате JSON
+				},
+				// body: json
 			})
+				.then(response => response.json()) // Можно вытащить через .json()
+				.then(data => {
+					return data;
+				})
+		}
 	}
 
 	addUserButton.addEventListener('click', (event) => {
@@ -342,7 +376,7 @@
 			"users": [
 				1349562
 			],
-			"chatId": 39686
+			"chatId": chatId
 		}
 		console.log('addUser data: ', data);
 
@@ -351,25 +385,126 @@
 				console.log('addUser returnValue: ', data);
 			});
 
+
+		function addUsers(data) {
+			const json = JSON.stringify(data) 
+
+			return fetch(`${host}/api/v2/chats/users`, {
+				method: 'PUT',
+				credentials: 'include', // Нужно подставлять куки
+				mode: 'cors', // Работаем с CORS
+				headers: {
+					'content-type': 'application/json', // Данные отправляем в формате JSON
+				},
+				body: json
+			})
+			.then(response => response.text()) // Можно вытащить через .json()
+			.then(data => {
+				return data;
+			})
+		}
 	})
 
-	function addUsers(data) {
-		const json = JSON.stringify(data) 
+	joinChatButton.addEventListener('click', (event) => {
+		event.preventDefault();
 
-		return fetch(`${host}/api/v2/chats/users`, {
-			method: 'PUT',
-			credentials: 'include', // Нужно подставлять куки
-			mode: 'cors', // Работаем с CORS
-			headers: {
-				'content-type': 'application/json', // Данные отправляем в формате JSON
-			},
-			body: json
-		})
-		.then(response => response.text()) // Можно вытащить через .json()
-		.then(data => {
-			return data;
-		})
+		if(!chatId || !state.userId) {
+			console.log('chatId: ', chatId);
+			console.log('state.userId: ', state.userId);
+			alert('Что-то пошло не так. Попробуйте позже')
+			return;
+		}
+
+		joinChat(chatId)
+			.then(token => {
+				state.token = token;
+				console.log('State.token: ',state.token);
+
+				openSocket();
+			})
+
+		function joinChat(chatId) {
+			return fetch(`${host}/api/v2/chats/token/${chatId}`, {
+				method: 'POST',
+				mode: 'cors',
+				credentials: 'include',
+			})
+			.then(response => response.json())
+			.then(data => {
+				console.log('token', data.token); // Получаем строку
+				return data.token
+			});
+		}
+	})
+
+	sendMessageForm.addEventListener('submit', (e) => {
+		e.preventDefault();
+
+		if(!state.socket) {
+			alert("Сначала нужно зайти в чат")
+			return;
+		}
+
+		const message = sendMessageForm.message.value;
+				
+		if(!message) {
+			alert("Нужно ввести сообщение")
+			return;
+		}
+
+		state.socket.send(JSON.stringify({
+			content: message,
+			type: 'message',
+		}));
+	})
+
+	function showMessage(message) {
+		messagesWindow.textContent += message + '\n';
+	}
+	
+
+
+	// messages_1.html
+
+	function openSocket() {
+		
+		const socket = new WebSocket(`wss://ya-praktikum.tech/ws/chats/${state.userId}/${chatId}/${state.token}`);
+
+		socket.addEventListener('open', () => {
+			console.log('Соединение установлено');
+
+			state.socket = socket;
+
+			socket.send(JSON.stringify({
+				content: 'Моё первое сообщение миру!',
+				type: 'message',
+			}));
+		});
+
+		socket.addEventListener('close', event => {
+			if (event.wasClean) {
+				console.log('Соединение закрыто чисто');
+			} else {
+				console.log('Обрыв соединения');
+			}
+
+			state.socket = null;
+
+			console.log(`Код: ${event.code} | Причина: ${event.reason}`);
+		});
+
+		socket.addEventListener('message', event => {
+			console.log('Получены данные', event.data);
+			showMessage(event.data)
+		});
+
+		socket.addEventListener('error', event => {
+			console.log('Ошибка', event.message);
+		});
 
 	}
+
+
+	
 </script>
 </html>

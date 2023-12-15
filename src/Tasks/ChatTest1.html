@@ -52,6 +52,7 @@
 			white-space: pre-wrap;
 			text-align: left;
 			padding: 0 10px;
+			overflow: auto;
 		}
 	</style>
 </head>
@@ -470,29 +471,45 @@
 		sendMessageForm.reset();
 	})
 
+
+
 	function showMessage(messageObj) {
 		let text = ``;
 		
 		//если это сообщение
 		if(messageObj.type === 'message') {
-			const name = state.users[messageObj.user_id];
-			const time = new Date(messageObj.time).toLocaleTimeString('ru-RU');
-			text = `${name}: ${messageObj.content} (${time})`;
+			text = formatMessage(messageObj);
 		}
 		// если это вход в чат
 		else if(messageObj.type === 'user connected') {
 			const name = state.users[messageObj.content];
 			text = `${name} вошёл в чат`
 		}
+		// это массив старых сообщений
+		else if(messageObj instanceof Array) {
+			console.log('Это массив: ', messageObj);
+			text = messageObj.map(item => {
+				return formatMessage(item);
+			}).reverse().join('\n')
+
+			messagesWindow.textContent = `${text}\n`;
+			messagesWindow.scrollTop = messagesWindow.scrollHeight;
+			return;
+		}
 		// другое
 		else {
 			text = `${messageObj.content} ${messageObj.type}`
 		}
 
+		function formatMessage(messageObj) {
+			const name = state.users[messageObj.user_id];
+			const time = new Date(messageObj.time).toLocaleTimeString('ru-RU');
+			return `${name}: ${messageObj.content} (${time})`;
+		}
 
 		messagesWindow.textContent += `${text}\n`;
+		messagesWindow.scrollTop = messagesWindow.scrollHeight;
 	}
-	
 
 
 	// messages_1.html

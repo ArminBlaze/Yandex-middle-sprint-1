@@ -49,6 +49,9 @@
 			height: 300px;
 			box-shadow: 1px 1px 3px rgba(0,0,0, 0.3);
 			margin: auto;
+			white-space: pre-wrap;
+			text-align: left;
+			padding: 0 10px;
 		}
 	</style>
 </head>
@@ -128,6 +131,7 @@
 			<button class="addUser" type="button">Добавить пользователя 2 Id: 1349562</button>
 			<br>
 			<button class="joinChat" type="button">Зайти в чат</button>
+			<button class="loadMessages" type="button">Загрузить сообщения</button>
 
 			<div class="chat__messages"></div>
 
@@ -159,7 +163,8 @@
 	const addUserButton = document.querySelector('.addUser');
 	const joinChatButton = document.querySelector('.joinChat');
 	const sendMessageForm = document.querySelector('.sendMessage');
-	const messagesWindow = document.querySelector('.chat__messages')
+	const messagesWindow = document.querySelector('.chat__messages');
+	const loadMessagesButton = document.querySelector('.loadMessages');
 
 	// при загрузке страницы нужно пытаться получить id пользователя.
 	// если успешно, то форму логина нужно скрыть
@@ -171,7 +176,8 @@
 		userId: null,
 		isLoggedIn: false,
 		token: null,
-		socket: null
+		socket: null,
+		users: {}
 	}
 
 	function afterLogin(id) {
@@ -347,8 +353,11 @@
 		
 		loadChatUsers(chatId)
 			.then(data => {
-				console.log(data);
-				const str = data.map(item => `${item.first_name} (${item.id})`).join(', ')
+				console.log('Пользователи чата: ', data);
+				const str = data.map(item => {
+					state.users[item.id] = item.first_name
+					return `${item.first_name} (${item.id})`
+				} ).join(', ')
 				usersBlock.textContent = str;
 			});
 
@@ -451,15 +460,37 @@
 			alert("Нужно ввести сообщение")
 			return;
 		}
+		console.log('Перед сокетом');
 
 		state.socket.send(JSON.stringify({
 			content: message,
 			type: 'message',
 		}));
+
+		sendMessageForm.reset();
 	})
 
-	function showMessage(message) {
-		messagesWindow.textContent += message + '\n';
+	function showMessage(messageObj) {
+		let text = ``;
+		
+		//если это сообщение
+		if(messageObj.type === 'message') {
+			const name = state.users[messageObj.user_id];
+			const time = new Date(messageObj.time).toLocaleTimeString('ru-RU');
+			text = `${name}: ${messageObj.content} (${time})`;
+		}
+		// если это вход в чат
+		else if(messageObj.type === 'user connected') {
+			const name = state.users[messageObj.content];
+			text = `${name} вошёл в чат`
+		}
+		// другое
+		else {
+			text = `${messageObj.content} ${messageObj.type}`
+		}
+
+
+		messagesWindow.textContent += `${text}\n`;
 	}
 	
 
@@ -495,7 +526,7 @@
 
 		socket.addEventListener('message', event => {
 			console.log('Получены данные', event.data);
-			showMessage(event.data)
+			showMessage(JSON.parse(event.data))
 		});
 
 		socket.addEventListener('error', event => {
@@ -503,6 +534,21 @@
 		});
 
 	}
+
+
+	loadMessagesButton.addEventListener('click', e => {
+		e.preventDefault();
+		
+		if(!state.socket) {
+			alert("Сначала нужно зайти в чат")
+			return;
+		}
+
+		state.socket.send(JSON.stringify({
+			content: '0',
+			type: 'get old',
+		}));
+	})
 
 
 	

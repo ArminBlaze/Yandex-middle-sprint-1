@@ -23,6 +23,7 @@
 # production
 /build
 /dist
+dist/
 
 # misc
 .DS_Store
@@ -38,3 +39,4 @@ yarn-error.log*
 .parcel-cache/data.mdb
 .parcel-cache/lock.mdb
 dist/index.html
+/dist/index.html

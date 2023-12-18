@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Document</title>
+</head>
+<body>
+	
+</body>
+
+<script>
+	const object = {
+		value: '42',
+		print () {
+			const type = () => {
+				return typeof this.value;
+			}
+			
+			console.log(`${this.value} is ${type()}`);
+		}
+	}
+
+	object.print(); // Поправьте замыкание
+
+	// Функция выводит "42 is undefined" вместо "42 is string"
+	// По какой-то причине type() не может увидеть поле value. Как это исправить?
+	// Решение - переделать функцию type на стрелку
+	
+</script>
+</html>

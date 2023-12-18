@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Document</title>
+</head>
+<body>
+	
+</body>
+
+<script>
+
+	const test = () => {
+		console.log(this);
+	};
+	
+	function test2(params) {
+		return (this + params)
+	};
+
+	function test3(params) {
+		return (this - params)
+	};
+
+	Number.prototype.plus = test2;
+	Number.prototype.minus = test3;
+
+	const result = (2).plus(3).minus(1) // 4
+	console.log("RESULT 4? :", result);
+
+</script>
+</html>

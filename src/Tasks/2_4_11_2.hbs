@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+
+    }
+
+    .ErrorPage__Wrapper {
+      width: 100%;
+      min-height: 100%;
+      display: flex;
+    }
+
+    .ErrorPage {
+      font-family: 'Inter', sans-serif;
+      font-style: normal;
+      font-weight: 500;
+      line-height: 40px;
+      /* identical to box height, or 100% */
+
+      text-align: center;
+
+      color: #1E1E1E;
+      width: max-content;
+      margin: 0 auto;
+    }
+
+    .ErrorPage__Header {
+      font-family: inherit;
+      color: inherit;
+      font-weight: inherit;
+      font-size: 40px;
+      margin-bottom: 20px;
+    }
+
+    .ErrorPage__Text {
+      font-size: 20px;
+      margin: 0;
+      margin-bottom: 69px;
+    }
+
+    .ErrorPage__Link {
+      color: #3369F3;
+      text-decoration: none;
+    }
+
+		.output {
+			display: inline-block;
+			min-width: 50px;
+			min-height: 30px;
+			border-radius: 3px;
+			box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7);
+			padding: 5px 10px;
+		}
+  </style>
+</head>
+<body>
+  <div class="ErrorPage__Wrapper">
+    <div class="ErrorPage">
+      <h1 class="ErrorPage__Header">Спринт 2 - 4.11 Typescript - Реактивность</h1>
+			<div>
+				<input type="text" id="text">
+			</div>
+			<div>
+				<span class="output">Начните вводить текст в инпут</span>
+			</div>
+      <a class="ErrorPage__Link" href="./Tasks.hbs">Назад к задачам</a>
+    </div>
+  </div>
+ 
+</body>
+
+<script src="./2_4_11_2.ts"></script>
+
+</html>

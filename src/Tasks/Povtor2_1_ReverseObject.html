@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Document</title>
+</head>
+<body>
+	
+</body>
+
+<script>
+
+	// аналог lodash.invert
+	// { a: 1 } => { 1: 'a' }
+
+	function invert(obj) {
+		const newObj = {}
+		Object.entries(obj).forEach(([key, value]) => {
+			newObj[value] = key
+		})
+
+		return newObj;
+	}
+
+	const obj = {
+		a: 1,
+		b: 2
+	}
+
+	const result = invert(obj);
+	console.log(result);
+</script>
+</html>

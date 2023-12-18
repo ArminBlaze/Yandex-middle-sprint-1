@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Document</title>
+	<style>
+		html, body {
+			margin: 0;
+			padding: 0;
+			width: 100%;
+		}
+
+		.Form__wrapper {
+			display: flex;
+			flex-direction: column;
+			padding-top: 20px;
+		}
+
+		.Form__header {
+			text-align: center;
+		}
+
+		.Form {
+			margin: 0 auto;
+		}
+
+		.Form label {
+			display: block;
+			margin-bottom: 10px;
+		}
+
+		.Form input {
+			padding: 5px 10px;
+		}
+
+		.chat {
+			display: none;
+			text-align: center;
+		}
+
+		button {
+			margin-bottom: 15px;
+			padding: 5px 10px;
+		}
+
+		.chat__messages {
+			width: 500px;
+			height: 300px;
+			box-shadow: 1px 1px 3px rgba(0,0,0, 0.3);
+			margin: auto;
+			white-space: pre-wrap;
+			text-align: left;
+			padding: 0 10px;
+		}
+	</style>
+</head>
+<body>
+	<div class="wrapper">
+
+		<div class="auth">
+			<div class="login Form__wrapper">
+				<h2 class="login__header Form__header">Вход</h2>
+				<form class="loginForm Form" action="">
+					<label>
+						Логин
+						<input type="text" name="login">
+					</label>
+					<label>
+						Пароль
+						<input type="password" name="password">
+					</label>
+					<button type="submit">Зайти</button>
+				</form>
+			</div>
+	
+			<div class="register Form__wrapper">
+				<h2 class="register__header Form__header">Регистрация</h2>
+				<form class="registerForm Form" action="">
+					<label>
+						Имя
+						<input type="text" name="first_name">
+					</label>
+					<label>
+						Фамилия
+						<input type="text" name="second_name">
+					</label>
+					<label>
+						Логин
+						<input type="text" name="login">
+					</label>
+					<label>
+						Электронная почта
+						<input type="email" name="email">
+					</label>
+					<label>
+						Телефон
+						<input type="tel" name="phone">
+					</label>
+					<label>
+						Пароль
+						<input type="password" name="password">
+					</label>
+					<label>
+						Повторите пароль
+						<input type="password" name="password2">
+					</label>
+					<button type="submit">Зайти</button>
+				</form>
+			</div>
+		</div>
+
+		<div class="chat">
+			<div class="id"></div>
+			<div class="users__wrapper">
+				<b>В чате сейчас:</b>
+				<div class="users"></div>
+			</div>
+
+			<div class="Form__wrapper">
+				<h2 class="Form__header">Создать чат</h2>
+				<form class="createChat Form">
+					<label>
+						Имя чата
+						<input type="text" name="title">
+					</label>
+					<button class="createChat__Button" type="submit">Создать чат</button>
+				</form>
+			</div>
+
+			<button class="addUser" type="button">Добавить пользователя 2 Id: 1349562</button>
+			<br>
+			<button class="joinChat" type="button">Зайти в чат</button>
+
+			<div class="chat__messages"></div>
+
+			<div class="Form__wrapper">
+				<form class="sendMessage Form">
+					<label>Ваше сообщение
+						<input type="text" name="message" value="">
+					</label>
+					<button class="sendMessage__Button" type="submit">Отправить</button>
+				</form>
+			</div>
+
+		</div>
+</div>
+</body>
+
+<script>
+	window.onload = function() {
+		autoLogin();
+	};
+
+	const host = 'https://ya-praktikum.tech';
+	const chatId = 39686;
+
+	const loginForm = document.querySelector('.loginForm');
+	const registerForm = document.querySelector('.registerForm');
+	const authBlock = document.querySelector('.auth');
+	const createChatForm = document.querySelector('.createChat');
+	const addUserButton = document.querySelector('.addUser');
+	const joinChatButton = document.querySelector('.joinChat');
+	const sendMessageForm = document.querySelector('.sendMessage');
+	const messagesWindow = document.querySelector('.chat__messages')
+
+	// при загрузке страницы нужно пытаться получить id пользователя.
+	// если успешно, то форму логина нужно скрыть
+
+	// let loggedIn = false;
+	// let userId = null;
+
+	const state = {
+		userId: null,
+		isLoggedIn: false,
+		token: null,
+		socket: null,
+		users: {}
+	}
+
+	function afterLogin(id) {
+		state.loggedIn = true;
+		state.userId = id;
+		hideAuthBlock();
+		showUserId(id);
+
+		showChatUsers(chatId);
+	}
+
+	function hideAuthBlock() {
+		authBlock.style.display = "none";
+	}
+
+	function showUserId(id) {
+		const chatBlock = document.querySelector('.chat');
+		const idBlock = document.querySelector('.id');
+
+		chatBlock.style.display = "block"
+		idBlock.textContent = "UserID: " + id;
+	}
+
+	async function autoLogin() {
+		console.log('запускаю автологин');
+		const id = await getUserData();
+		// console.log("ID в AUTOLOGIN", id);
+
+		if(id) {
+			afterLogin(id);
+		}
+	}
+
+
+	loginForm.addEventListener('submit', (event) => {
+		event.preventDefault();
+		
+		console.log(loginForm.login.value);
+		console.log(loginForm.password.value);
+
+		const data = {
+			login: loginForm.login.value,
+			password: loginForm.password.value
+		}
+
+		makeLogin(data)
+			.then(data => {
+				getUserData();
+			});
+
+		function makeLogin(data) {
+			const json = JSON.stringify(data) 
+
+			return fetch(`${host}/api/v2/auth/signin`, {
+				method: 'POST',
+				credentials: 'include', // Нужно подставлять куки
+				mode: 'cors', // Работаем с CORS
+				headers: {
+					'content-type': 'application/json', // Данные отправляем в формате JSON
+				},
+				body: json
+			})
+				.then(response => response.text()) // Можно вытащить через .json()
+				.then(data => {
+					console.log(data);
+					return data;
+				})
+		}
+	})
+
+	createChatForm.addEventListener('submit', (event) => {
+		event.preventDefault();
+		
+		const data = {
+			title: createChatForm.title.value
+		}
+		console.log('CreateChat data: ', data);
+
+		createChat(data)
+			.then(data => {
+				console.log('createChat returnValue: ', data);
+			});
+
+		function createChat(data) {
+			const json = JSON.stringify(data) 
+
+			return fetch(`${host}/api/v2/chats`, {
+				method: 'POST',
+				credentials: 'include', // Нужно подставлять куки
+				mode: 'cors', // Работаем с CORS
+				headers: {
+					'content-type': 'application/json', // Данные отправляем в формате JSON
+				},
+				body: json
+			})
+				.then(response => response.text()) // Можно вытащить через .json()
+				.then(data => {
+					console.log(data);
+					return data;
+				})
+		}
+	})
+
+	registerForm.addEventListener('submit', (event) => {
+		event.preventDefault();
+		
+		console.log();
+
+		const password = registerForm.password.value;
+		const password2 = registerForm.password2.value;
+
+		if(password !== password2) {
+			alert("Пароли должны совпадать!")
+			return;
+		}
+
+		const data = {
+			first_name: registerForm.first_name.value,
+			second_name: registerForm.second_name.value,
+			login: registerForm.login.value,
+			email: registerForm.email.value,
+			password: password,
+			phone: registerForm.phone.value
+		}
+
+		console.log(data);
+		makeRegister(data)
+			.then(async data =>  {
+				const id = await getUserData();
+				if(id) {
+					afterLogin(id);
+				}
+			});
+
+
+		function makeRegister(data) {
+			const json = JSON.stringify(data) 
+
+			return fetch(`${host}/api/v2/auth/signup`, {
+				method: 'POST',
+				credentials: 'include', // Нужно подставлять куки
+				mode: 'cors', // Работаем с CORS
+				headers: {
+					'content-type': 'application/json', // Данные отправляем в формате JSON
+				},
+				body: json
+			})
+				.then(response => response.text()) // Можно вытащить через .json()
+				.then(data => {
+					console.log(data);
+					return data;
+				})
+		}
+	})
+
+	async function getUserData() {
+		return fetch(`${host}/api/v2/auth/user`, { // Получаем подробную информацию о пользователе и проверяем, что куки проставились
+			method: 'GET',
+			mode: 'cors',
+			credentials: 'include',
+		})
+		.then(r => r.json())
+		.then(data => {
+			console.log('user', data);
+			const id = data.id;
+			// console.log('ID', id);
+			return id;
+		});
+	}
+
+	function showChatUsers(chatId) {
+		const usersBlock = document.querySelector('.users');
+		
+		loadChatUsers(chatId)
+			.then(data => {
+				console.log('Пользователи чата: ', data);
+				const str = data.map(item => {
+					state.users[item.id] = item.first_name
+					return `${item.first_name} (${item.id})`
+				} ).join(', ')
+				usersBlock.textContent = str;
+			});
+
+		function loadChatUsers(chatId) {
+			return fetch(`${host}/api/v2/chats/${chatId}/users`, {
+				method: 'GET',
+				credentials: 'include', // Нужно подставлять куки
+				mode: 'cors', // Работаем с CORS
+				headers: {
+					'content-type': 'application/json', // Данные отправляем в формате JSON
+				},
+				// body: json
+			})
+				.then(response => response.json()) // Можно вытащить через .json()
+				.then(data => {
+					return data;
+				})
+		}
+	}
+
+	addUserButton.addEventListener('click', (event) => {
+		event.preventDefault();
+		
+		const data = {
+			"users": [
+				1349562
+			],
+			"chatId": chatId
+		}
+		console.log('addUser data: ', data);
+
+		addUsers(data)
+			.then(data => {
+				console.log('addUser returnValue: ', data);
+			});
+
+
+		function addUsers(data) {
+			const json = JSON.stringify(data) 
+
+			return fetch(`${host}/api/v2/chats/users`, {
+				method: 'PUT',
+				credentials: 'include', // Нужно подставлять куки
+				mode: 'cors', // Работаем с CORS
+				headers: {
+					'content-type': 'application/json', // Данные отправляем в формате JSON
+				},
+				body: json
+			})
+			.then(response => response.text()) // Можно вытащить через .json()
+			.then(data => {
+				return data;
+			})
+		}
+	})
+
+	joinChatButton.addEventListener('click', (event) => {
+		event.preventDefault();
+
+		if(!chatId || !state.userId) {
+			console.log('chatId: ', chatId);
+			console.log('state.userId: ', state.userId);
+			alert('Что-то пошло не так. Попробуйте позже')
+			return;
+		}
+
+		joinChat(chatId)
+			.then(token => {
+				state.token = token;
+				console.log('State.token: ',state.token);
+
+				openSocket();
+			})
+
+		function joinChat(chatId) {
+			return fetch(`${host}/api/v2/chats/token/${chatId}`, {
+				method: 'POST',
+				mode: 'cors',
+				credentials: 'include',
+			})
+			.then(response => response.json())
+			.then(data => {
+				console.log('token', data.token); // Получаем строку
+				return data.token
+			});
+		}
+	})
+
+	sendMessageForm.addEventListener('submit', (e) => {
+		e.preventDefault();
+
+		if(!state.socket) {
+			alert("Сначала нужно зайти в чат")
+			return;
+		}
+
+		const message = sendMessageForm.message.value;
+				
+		if(!message) {
+			alert("Нужно ввести сообщение")
+			return;
+		}
+		console.log('Перед сокетом');
+
+		state.socket.send(JSON.stringify({
+			content: message,
+			type: 'message',
+		}));
+
+		sendMessageForm.reset();
+	})
+
+	function showMessage(messageObj) {
+		const name = state.users[messageObj.user_id];
+		const time = new Date(messageObj.time).toLocaleTimeString('ru-RU');
+		const text = `${name}: ${messageObj.content} (${time})`;
+		messagesWindow.textContent += `${text}\n`;
+	}
+	
+
+
+	// messages_1.html
+
+	function openSocket() {
+		
+		const socket = new WebSocket(`wss://ya-praktikum.tech/ws/chats/${state.userId}/${chatId}/${state.token}`);
+
+		socket.addEventListener('open', () => {
+			console.log('Соединение установлено');
+
+			state.socket = socket;
+
+			socket.send(JSON.stringify({
+				content: 'Моё второе сообщение миру!',
+				type: 'message',
+			}));
+		});
+
+		socket.addEventListener('close', event => {
+			if (event.wasClean) {
+				console.log('Соединение закрыто чисто');
+			} else {
+				console.log('Обрыв соединения');
+			}
+
+			state.socket = null;
+
+			console.log(`Код: ${event.code} | Причина: ${event.reason}`);
+		});
+
+		socket.addEventListener('message', event => {
+			console.log('Получены данные', event.data);
+			showMessage(JSON.parse(event.data))
+		});
+
+		socket.addEventListener('error', event => {
+			console.log('Ошибка', event.message);
+		});
+
+	}
+
+
+	
+</script>
+</html>

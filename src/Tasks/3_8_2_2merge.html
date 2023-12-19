@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Document</title>
+</head>
+<body>
+	
+	<script>
+
+	// type Indexed<T = unknown> = {
+	// 		[key in string]: T;
+	// };
+
+	function merge(obj1, obj2) {
+		// Код здесь
+		// если во втором объекте свойства нет, то берём это свойство
+		// если свойство есть, то нужно смотреть объект ли это в обоих объектах. Если оба объекты, то нужно их сложить?
+		const result = {};
+
+		// копируем все уникальные свойства из первого объекта + обрабатываем одинаковые свойства
+		for (let key in obj1) {
+			if (obj1.hasOwnProperty(key)) { 
+				// если во втором объекте свойства нет, то записываем это свойство сразу в результат
+				if(!obj2[key]) {
+					result[key] = obj1[key]
+				}
+				// если в обоих объектах есть свойство
+				else {
+					// проверяем, объект ли это в обоих объектах.
+					if(isObject(obj1[key]) && isObject(obj2[key])) {
+						// если оба объекты, то нужно запустить merge рекурсивно и вернувшийся результат записать в result
+						const newObj = merge(obj1[key], obj2[key])
+						result[key] = newObj;
+					}
+					// если свойство не объект - просто берём свойство из второго объекта
+					else {
+						result[key] = obj2[key]
+					}
+				}
+			}
+		}
+
+		// добираем оставшиеся свойства из второго объекта
+		for (let key in obj2) {
+			if (obj2.hasOwnProperty(key)) { 
+				// если во втором объекте свойства нет, то записываем это свойство сразу в результат
+				if(!obj1[key]) {
+					result[key] = obj2[key]
+				}
+			}
+		}
+
+		return result;
+	}
+
+	function isObject(obj) {
+		return Object.prototype.toString.call(obj) === '[object Object]'
+	}
+
+	// export default merge;
+
+	const result = merge(
+		{
+			a: {
+				b: {a: 2}
+			},
+		 	d: 5
+		},
+		{
+			a: {
+				b: {c: 1}
+			}
+		});
+
+	console.log(result);
+	/*
+	{
+		a: {
+			b: {
+				a: 2,
+				c: 1,
+			}
+		},
+		d: 5,
+	}
+	*/
+	</script>
+</body>
+</html>

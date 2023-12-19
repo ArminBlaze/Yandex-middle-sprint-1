@@ -14,7 +14,26 @@
 		trim('\xA0foo', ' '); // " foo"
 		trim('-_-ab c -_-', '_-'); // ab c
 		['  foo  ', '  bar  '].map(value => trim(value)); // => ['foo', 'bar']
+		trim('-_-ab -_ c -_-', '_-'); // ab c
 
+
+		// function trim(str, symbols) {
+		// 	let result = '';
+
+		// 	let reg;
+		// 	// если нет symbols - удаляем из строки пробелы
+		// 	if(symbols === undefined) {
+		// 		reg = /^\s*(\w*)\s*$/
+		// 	}
+		// 	// если есть symbols - создаём регексп.
+		// 	else {
+		// 		// [symbols]
+		// 		reg = new RegExp(`^[${symbols}]*([^${symbols}]*)[${symbols}]*$`)
+		// 		console.log(reg);
+		// 	}
+		// 	result = str.replace(reg, "$1")
+		// 	console.log(result, result.length);
+		// }
 
 		function trim(str, symbols) {
 			let result = '';
@@ -27,11 +46,11 @@
 			// если есть symbols - создаём регексп.
 			else {
 				// [symbols]
-				reg = new RegExp(`^[${symbols}]*([^${symbols}]*)[${symbols}]*$`)
+				reg = new RegExp(`^[${symbols}]*([^${symbols}].*[^${symbols}])[${symbols}]*$`)
 				console.log(reg);
 			}
 			result = str.replace(reg, "$1")
-			console.log(result, result.length);
+			console.log(str, 'Результат: ', result, result.length);
 		}
 
 		// trim('\xA0abc\xA0')

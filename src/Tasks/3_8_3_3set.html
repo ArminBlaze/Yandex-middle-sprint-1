@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Document</title>
+</head>
+<body>
+	
+	<script>
+		function set(object, path, value) {
+			// Код
+			if(typeof path !== 'string') {
+				throw new Error("path must be string")
+			}
+			if(Object.prototype.toString.call(object) !== '[object Object]') {
+				return object
+			}
+
+			// превратить Path в массив
+			const arr = path.split('.');
+			// перебрать массив и записать в свойства объекта value
+			let currentObj = object;
+			arr.forEach((item, i) => {
+				// если это последний элемент, то записываем в объект
+				if(i === arr.length-1) {
+					currentObj[item] = value;
+				}
+				else {
+					if(!currentObj[item]) {
+						currentObj[item] = {}
+					}
+					currentObj = currentObj[item]
+				}
+			});
+
+			return object;
+		}
+
+		// export default set
+
+			const result1 = set({ foo: 5 }, 'bar.baz', 10); // { foo: 5, bar: { baz: 10 } }
+			const result2 = set(3, 'foo.bar', 'baz'); // 3
+
+			console.log(result1);
+			console.log(result2);
+	</script>
+</body>
+</html>

@@ -8,6 +8,7 @@
 <body>
 	
 	<script>
+		// функция не работает с вложенными массивами.
 		function isEqual(obj1, obj2) {
 			// запускаем проход по первому объекту. Там же запускаем проверки при наличии одинаковых свойств
 			// если найдено какое-то свойство, которого нет во втором объекте, вернём false
@@ -15,16 +16,26 @@
 			// после проверки первого объекта, запускаем проверку второго объекта.
 			// если найдено какое-то свойство, которого нет в первом объекте, то вернём false
 			// тут нужно как-то оптимизировать проверку второго объекта, чтобы он не проверял по второму разу уже проверенные свойства в первом объекте. Ну или просто быстро проходим да и всё.
+
+			if (Object.keys(obj1).length !== Object.keys(obj2).length) {
+				return false;
+			}
 			
 			for (let key in obj1) {
 				if (obj1.hasOwnProperty(key)) { 
 					if(!obj2[key]) return false;
 
+					// если оба объекты, то нужно запустить isEqual рекурсивно
 					if(isObject(obj1[key]) && isObject(obj2[key])) {
-						// если оба объекты, то нужно запустить isEqual рекурсивно
 						const result = isEqual(obj1[key], obj2[key]);
 						if(result === false) return false
 					}
+					else {
+						if(obj1[key] !== obj2[key]) {
+							return false
+						}
+					}
+					
 				}
 			}
 
@@ -46,6 +57,10 @@
 		const a = {a: 1};
 		const b = {a: 1};
 		console.log(isEqual(a, b)); // true
+
+		const a3 = {a: 1};
+		const b3 = {a: 2};
+		console.log(isEqual(a3, b3)); // false
 
 		const c = {
 			b: {

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Document</title>
+</head>
+<body>
+	
+	<script>
+		function isEqual(obj1, obj2) {
+			// запускаем проход по первому объекту. Там же запускаем проверки при наличии одинаковых свойств
+			// если найдено какое-то свойство, которого нет во втором объекте, вернём false
+			// если оба свойства - объекты - запускаем рекурсивно
+			// после проверки первого объекта, запускаем проверку второго объекта.
+			// если найдено какое-то свойство, которого нет в первом объекте, то вернём false
+			// тут нужно как-то оптимизировать проверку второго объекта, чтобы он не проверял по второму разу уже проверенные свойства в первом объекте. Ну или просто быстро проходим да и всё.
+			
+			for (let key in obj1) {
+				if (obj1.hasOwnProperty(key)) { 
+					if(!obj2[key]) return false;
+
+					if(isObject(obj1[key]) && isObject(obj2[key])) {
+						// если оба объекты, то нужно запустить isEqual рекурсивно
+						const result = isEqual(obj1[key], obj2[key]);
+						if(result === false) return false
+					}
+				}
+			}
+
+			for (let key in obj2) {
+				if (obj2.hasOwnProperty(key)) { 
+					if(!obj1[key]) return false;
+				}
+			}
+
+			return true;
+		}
+
+		function isObject(obj) {
+			return Object.prototype.toString.call(obj) === '[object Object]'
+		}
+
+		// export default isEqual
+
+		const a = {a: 1};
+		const b = {a: 1};
+		console.log(isEqual(a, b)); // true
+
+		const c = {
+			b: {
+				a: 1
+			}
+		}
+
+		const d = {
+			b: {
+				e: 1
+			}
+		}
+		console.log(isEqual(c, d)); // false
+
+		const a2 = {
+			b: {
+				a: 1
+			}
+		}
+
+		const b2 = {
+			b: {
+				a: 1
+			}
+		}
+		console.log(isEqual(a2, b2));// true
+	</script>
+</body>
+</html>

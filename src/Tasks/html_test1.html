@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Document</title>
+</head>
+<body>
+	<p>Привет &#39;</p>
+	<p>#34 = &#34;</p>
+	<p class="quote1">#39 = &#39;</p>
+	<p class="quote2">#x27 = &#x27;</p>
+
+	<script>
+		const quote1 = document.querySelector('.quote1').textContent;
+		const quote2 = document.querySelector('.quote2').textContent;
+
+		console.log(quote1[quote1.length-1]);
+		console.log(quote2[quote2.length-1]);
+		console.log(quote1[quote1.length-1] === quote2[quote2.length-1]);
+	</script>
+</body>
+</html>

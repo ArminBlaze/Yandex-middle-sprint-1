@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Document</title>
+	<style>
+		.red {
+			background-color: red;
+			color: white;
+			font-size: 20px;
+		}
+	</style>
+</head>
+<body>
+	<ul class="list"></ul>
+
+	<script>
+		const parent = document.querySelector('.list');
+		const code = 	`<img src="" onerror="alert('Твой компьютер взломали')">`;
+
+		const child = document.createElement('span');
+		child.innerText = code;
+		parent.innerHTML += `<li class='red'>${child.outerHTML}</li>`;
+	</script>
+</body>
+</html>

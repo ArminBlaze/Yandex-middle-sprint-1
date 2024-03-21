@@ -141,6 +141,8 @@
 
 
   </style>
+
+	  <script src="./Register.js" type="module"></script>
 </head>
 <body>
   <div class="wrapper">
@@ -148,32 +150,32 @@
       <h1 class="Auth__Header">Регистрация</h1>
 
       <label class="Auth__Label">
-        <input class="Auth__input" type="email" name="email" placeholder="Почта">
+        <input class="Auth__input" type="email" name="email" placeholder="Почта" required>
         <div class="Auth__LabelFloat">Почта</div>
         <div class="Auth__Error Auth__Error_login">Введите корректный адрес</div>
       </label>
       <label class="Auth__Label">
-        <input class="Auth__input" type="text" name="login" placeholder="Логин">
+        <input class="Auth__input" type="text" name="login" placeholder="Логин" required>
         <div class="Auth__LabelFloat">Логин</div>
         <div class="Auth__Error Auth__Error_login">Неверный логин</div>
       </label>
       <label class="Auth__Label">
-        <input class="Auth__input" type="text" name="name" placeholder="Имя">
+        <input class="Auth__input" type="text" name="first_name" placeholder="Имя" required>
         <div class="Auth__LabelFloat">Имя</div>
         <div class="Auth__Error Auth__Error_login">Введите имя</div>
       </label>
       <label class="Auth__Label">
-        <input class="Auth__input" type="text" name="surname" placeholder="Фамилия">
+        <input class="Auth__input" type="text" name="second_name" placeholder="Фамилия" required>
         <div class="Auth__LabelFloat">Фамилия</div>
         <div class="Auth__Error Auth__Error_login">Введите фамилию</div>
       </label>
       <label class="Auth__Label">
-        <input class="Auth__input" type="tel" name="tel" placeholder="Телефон">
+        <input class="Auth__input" type="tel" name="phone" placeholder="Телефон" required>
         <div class="Auth__LabelFloat">Телефон</div>
         <div class="Auth__Error Auth__Error_login">Введите телефон</div>
       </label>
       <label class="Auth__Label">
-        <input type="password" class="Auth__input" name="password" placeholder="Пароль">
+        <input type="password" class="Auth__input" name="password" placeholder="Пароль" required>
         <div class="Auth__LabelFloat">Пароль</div>
         <div class="Auth__Error Auth__Error_password">Неверный пароль</div>
       </label>

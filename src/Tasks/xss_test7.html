@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Document</title>
+</head>
+<body>
+	<div class="parent">Пусто</div>
+	<span class="child">span</span>
+	<div class="parent2">2</div>
+	<br>
+	<a href="javascript:alert(String.fromCharCode(88,83,83))">нажми здесь</a>
+
+	<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+	"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+	<svg version="1.1" xmlns="http://www.w3.org/2000/svg">
+	<circle cx="250" cy="250" r="50" fill="red" />
+	<img src="" onerror="alert('SVG сломал твой комп!')">
+	</svg>
+
+	<script>
+		const code = 	`<img src="" onerror="alert('Твой компьютер взломали')">`;
+		const child = document.querySelector('.child');
+		const parent = document.querySelector('.parent');
+		const parent2 = document.querySelector('.parent2');
+		
+		child.innerText = code;
+		parent.innerHTML = `<i>${child.outerHTML}</i>`;
+
+
+		const dummy = document.createElement('a');
+		dummy.href = 'javascript:alert(String.fromCharCode(88,83,83))';
+		dummy.textContent = 'ссылка dummy'
+		parent2.appendChild(dummy);
+		
+	</script>
+</body>
+</html>

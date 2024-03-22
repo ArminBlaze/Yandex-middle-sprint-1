@@ -33,7 +33,7 @@ class AuthApi {
 			}),
 		});
 
-		console.log(response.text());
+		console.log(response.text().then(console.log));
 	};
 }
 

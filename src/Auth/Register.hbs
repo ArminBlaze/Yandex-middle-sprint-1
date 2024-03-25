@@ -154,38 +154,38 @@
       <h1 class="Auth__Header">Регистрация</h1>
 
       <label class="Auth__Label">
-        <input class="Auth__input" type="email" name="email" placeholder="Почта" required>
+        <input class="Auth__input" type="email" name="email" placeholder="Почта" required maxlength="64">
         <div class="Auth__LabelFloat">Почта</div>
         <div class="Auth__Error Auth__Error_login">Введите корректный адрес</div>
       </label>
       <label class="Auth__Label">
-        <input class="Auth__input" type="text" name="login" placeholder="Логин" required>
+        <input class="Auth__input" type="text" name="login" placeholder="Логин" required maxlength="64">
         <div class="Auth__LabelFloat">Логин</div>
         <div class="Auth__Error Auth__Error_login">Неверный логин</div>
       </label>
       <label class="Auth__Label">
-        <input class="Auth__input" type="text" name="first_name" placeholder="Имя" required>
+        <input class="Auth__input" type="text" name="first_name" placeholder="Имя" required maxlength="64">
         <div class="Auth__LabelFloat">Имя</div>
         <div class="Auth__Error Auth__Error_login">Введите имя</div>
       </label>
       <label class="Auth__Label">
-        <input class="Auth__input" type="text" name="second_name" placeholder="Фамилия" required>
+        <input class="Auth__input" type="text" name="second_name" placeholder="Фамилия" required maxlength="64">
         <div class="Auth__LabelFloat">Фамилия</div>
         <div class="Auth__Error Auth__Error_login">Введите фамилию</div>
       </label>
       <label class="Auth__Label">
         <input class="Auth__input" type="tel" name="phone" placeholder="Телефон" 
-					pattern='^(8|\+7)?[\- ]?\(?\d{3}\)?[\- ]?\d{7}$' title="Введите телефон в формате +7 123 1234567" required>
+					pattern='^(8|\+7)?[\- ]?\(?\d{3}\)?[\- ]?\d{7}$' title="Введите телефон в формате +7 123 1234567" required maxlength="12">
         <div class="Auth__LabelFloat">Телефон</div>
         <div class="Auth__Error Auth__Error_login">Введите телефон</div>
       </label>
       <label class="Auth__Label">
-        <input type="password" class="Auth__input" name="password" placeholder="Пароль" required>
+        <input type="password" class="Auth__input" name="password" placeholder="Пароль" required  maxlength="64">
         <div class="Auth__LabelFloat">Пароль</div>
         <div class="Auth__Error Auth__Error_password">Неверный пароль</div>
       </label>
       <label class="Auth__Label">
-        <input type="password" class="Auth__input" name="repeat_password" placeholder="Пароль (ещё раз)">
+        <input type="password" class="Auth__input" name="repeat_password" placeholder="Пароль (ещё раз)" required  maxlength="64">
         <div class="Auth__LabelFloat">Пароль (ещё раз)</div>
         <div class="Auth__Error Auth__Error_password">Пароли не совпадают</div>
       </label>

@@ -47,17 +47,17 @@ form.addEventListener('submit', (e => {
 
 function validateForm(fieldsArr) {
 	console.log('Запускаю валидацию формы!!!');
-	const result = fieldsArr.every(field => {
+	let result = true;
+
+	fieldsArr.forEach(field => {
 		const inputResult = validateField(field);
-		return inputResult;
+		if(inputResult === false) result = false;
 	});
-	console.log('validateForm result: ', result);
+	console.log('Результат валидации формы: ', result);
 	return result;
 }
 
 form.addEventListener('focusout', e => {
-	console.log(e.target);
-
 	validateField(e.target);
 });
 
@@ -65,7 +65,6 @@ function validateField(input) {
 	// const input = e.target;
 	const name = input.name;
 	const value = input.value;
-	console.log(name, value);
 
 	if(!value) {
 		showError(input, 'Заполните это поле');
@@ -115,7 +114,6 @@ function validateField(input) {
 
 		case 'second_name': {
 			if(!value.match(/^[а-яА-ЯЁё]+$/)) {
-				console.log('second_name value: ', value);
 				showError(input, 'Фамилия должна состоять из русских букв');
 			}
 			else {
@@ -162,16 +160,19 @@ function validateField(input) {
 		}
 
 		default:
-			break;
+			return false;
 	}
+	return false;
 }
 
 function showError(input, errorMessage = '') {
+	if(input.nodeName.toUpperCase() !== 'INPUT') {
+		return;
+	}
 	const parent = input.parentElement;
 	parent.classList.add('Error');
 
 	if(errorMessage) {
-		console.log(errorMessage, parent);
 		const errorBlock = parent.querySelector('.Auth__Error');
 		errorBlock.innerText = errorMessage;
 	}

@@ -64,7 +64,7 @@ form.addEventListener('focusout', e => {
 function validateField(input) {
 	// const input = e.target;
 	const name = input.name;
-	const value = input.value;
+	const value = input.value.trim();
 
 	if(!value) {
 		showError(input, 'Заполните это поле');

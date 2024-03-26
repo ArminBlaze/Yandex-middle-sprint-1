@@ -77,10 +77,7 @@ function validateField(input) {
 
 	switch (name) {
 		case 'email': {
-			if(value.length >= 63) {
-				showError(input, 'Почта должна быть короче 63 символов');
-			}
-			else if(!value.match(/^[a-zA-Z_-\d]+@[a-zA-Z_-]+\.[a-zA-Z]{2,3}$/)) {
+			if(!value.match(/^[a-zA-Z_-\d]+@[a-zA-Z_-]+\.[a-zA-Z]{2,3}$/)) {
 				showError(input, 'Неправильный адрес почты');
 			}
 			else {

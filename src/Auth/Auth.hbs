@@ -135,6 +135,9 @@
       display: none;
     }
 
+		.Error .Auth__Error {
+			display: block;
+		}
 
   </style>
 
@@ -145,12 +148,12 @@
     <form class="Auth" action="/echo">
       <h1 class="Auth__Header">Вход</h1>
       <label class="Auth__Label">
-        <input class="Auth__input" type="text" name="login" placeholder="Логин">
+        <input class="Auth__input" type="text" name="login" placeholder="Логин" required maxlength="64">
         <div class="Auth__LabelFloat">Логин</div>
         <div class="Auth__Error Auth__Error_login">Неверный логин</div>
       </label>
       <label class="Auth__Label">
-        <input type="password" class="Auth__input" name="password" placeholder="ПарольПароль">
+        <input type="password" class="Auth__input" name="password" placeholder="Пароль" required  maxlength="256">
         <div class="Auth__LabelFloat">Пароль</div>
         <div class="Auth__Error Auth__Error_password">Неверный пароль</div>
       </label>
